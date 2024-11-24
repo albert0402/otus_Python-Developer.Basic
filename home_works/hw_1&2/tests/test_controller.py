@@ -2,7 +2,7 @@ import pytest
 
 from src.controller import run_phonebook
 from src.model import PhoneBook, FileError, ContactError
-import src.view as view
+from src import view
 
 def test_run_phonebook(monkeypatch):
     # Simulate user input for menu
@@ -11,7 +11,7 @@ def test_run_phonebook(monkeypatch):
 
     # Simulate file load
     phonebook = PhoneBook()
-    monkeypatch.setattr("controller.PhoneBook", lambda: phonebook)
+    monkeypatch.setattr("src.controller.PhoneBook", lambda: phonebook)
     
     # Ensure the program runs without errors
     assert run_phonebook() is None  

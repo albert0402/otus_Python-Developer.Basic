@@ -1,5 +1,5 @@
 from src.model import PhoneBook, FileError, ContactError
-import src.view as view
+from src import view
 import os
 
 def run_phonebook():

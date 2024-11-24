@@ -1,4 +1,5 @@
 import pytest
+import json
 from src.model import PhoneBook, Contact, FileError, ContactError
 
 # Helper function to create a sample phonebook with contacts
