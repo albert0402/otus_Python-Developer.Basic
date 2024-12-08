@@ -1,43 +1,8 @@
 import json
 import os
-
-class FileError(Exception):
-    """
-    Raised when there is an issue with file operations.
-    """
-    pass
-
-class ContactError(Exception):
-    """
-    Raised for issues related to contacts.
-    """
-    pass
-
-class Contact:
-    """
-    Represents a single contact in the phonebook.
-    """
-
-    def __init__(self, id, name, phone, comment):
-        """
-        Initializes a contact with the given details.
-        
-        Args:
-            contact_id (int): Unique identifier for the contact.
-            name (str): Name of the contact.
-            phone (str): Phone number of the contact.
-            comment (str): Additional notes about the contact.
-        """
-        self.id = id
-        self.name = name
-        self.phone = phone
-        self.comment = comment
-
-    def __str__(self):
-        """
-        Returns a string representation of the contact.
-        """
-        return f"ID: {self.id}, Name: {self.name}, Phone: {self.phone}, Comment: {self.comment}"
+from typing import List, Optional
+from src.exceptions import FileError, ContactError
+from src.model_contact import Contact
 
 
 class PhoneBook:
@@ -45,13 +10,13 @@ class PhoneBook:
     Represents the phone book that manages multiple contacts.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """
         Initializes an empty phone book.
         """
-        self.contacts = []
+        self.contacts: list[Contact] = []
 
-    def load_from_file(self, file_name):
+    def load_from_file(self, file_name: str) -> None:
         """
         Loads contacts from a JSON file.
 
@@ -72,7 +37,7 @@ class PhoneBook:
             except json.JSONDecodeError:
                 raise FileError(f"File '{file_name}' is not a valid JSON file.")
 
-    def save_to_file(self, file_name):
+    def save_to_file(self, file_name: str) -> None:
         """
         Saves all contacts to a JSON file.
 
@@ -89,7 +54,7 @@ class PhoneBook:
         except Exception as e:
             raise FileError(f"Failed to save to file '{file_name}': {e}")
 
-    def add_contact(self, name, phone, comment):
+    def add_contact(self, name: str, phone: str, comment: str) -> None:
         """
         Adds a new contact to the phone book.
 
@@ -107,7 +72,7 @@ class PhoneBook:
 
         self.contacts.append(new_contact)
 
-    def find_contact(self, info):
+    def find_contact(self, info: str) -> List[Contact]:
         """
         Searches for contacts that match the given information.
 
@@ -126,7 +91,11 @@ class PhoneBook:
             raise ContactError("No contacts found matching the given information.")
         return results
 
-    def update_contact(self, contact_id, name=None, phone=None, comment=None):
+    def update_contact(self,
+                        contact_id: int,
+                        name: Optional[str] = None,
+                        phone: Optional[str] = None,
+                        comment: Optional[str] = None) -> None:
         """
         Updates the details of an existing contact.
 
@@ -148,7 +117,7 @@ class PhoneBook:
                 return
         raise ContactError(f"Contact with ID {contact_id} not found.")
 
-    def delete_contact(self, contact_id):
+    def delete_contact(self, contact_id: int) -> None:
         """
         Deletes a contact by its ID.
 

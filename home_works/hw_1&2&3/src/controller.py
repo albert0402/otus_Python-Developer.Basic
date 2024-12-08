@@ -1,6 +1,11 @@
-from src.model import PhoneBook, FileError, ContactError
+# from src.model_contact import Contact
+# from src.model_phonebook import PhoneBook
+# from src.exceptions import FileError, ContactError
 from src import view
+from src.model_phonebook import PhoneBook
+from src.exceptions import FileError, ContactError
 import os
+
 
 def run_phonebook():
     """
