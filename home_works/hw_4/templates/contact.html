@@ -1,15 +1,51 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div id="how-to-order-page">
+    <style>
+        #how-to-order-page .nav-item a.nav-link {
+            border: 2px solid blue;
+            border-radius: 20px;
+            padding: 8px 15px;
+            color: blue;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
 
-<body>
+        #how-to-order-page .nav-item a.nav-link:hover {
+            background-color: blue;
+            color: white;
+            transition: 0.3s;
+        }
+
+        #how-to-order-page .nav {
+            padding-left: 0;
+            list-style: none;
+        }
+    </style>
+
+    <p></p>
+    <h1>Как заказать товар из магазина</h1>
+    <p>К сожалению, у нас нет возможности заказа через cайт</p>
+    <p>Вы можете оформить заказ с доставкой или воспользоваться самовывозом из магазина.</p>
+    <p></p>
+    <p><strong>Инструкция по доставке:</strong></p>
+    <ul class="nav mb-4">
+        <li class="nav-item">
+            <a class="nav-link" href="/delivery/">Доставка</a>
+        </li>
+    </ul>
+    <p><strong>Инструкция по самовывозу:</strong></p>
+    <ul class="nav mb-4">
+        <li class="nav-item">
+            <a class="nav-link" href="/map/">Как добраться</a>
+        </li>
+    </ul>
+    <p></p>
     <h2>Контакты</h2>
-    <p></p>
     <p>Справки по наличию и по ценам в торговом зале Вы можете получить по телефонам:</p>
-    <p></p>
-    <p>+7 (999) 999-99-99 </p>
-    <p>+7 (999) 999-99-88 </p>
-    <p></p>
-</body>
-
-{% endblock %}    
+    <p>+7 (999) 999-99-99</p>
+    <p>+7 (999) 999-99-88</p>
+</div>
+{% endblock %}

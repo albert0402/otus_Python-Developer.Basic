@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Автомобильный инструмент</h1>
+<p></p>
+    <div class="container">
+        <div class="row">
+            {% for product in products %}
+                <div class="col-md-4 mb-4"> 
+                    <div class="card h-100">
+                        <img src="{{ product.image_url }}" class="card-img-top" alt="Автомобильный инструмент" style="height: 200px; object-fit: cover;"> 
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">{{ product.name }}</h5>
+                            <p class="card-text">{{ product.description }}</p>
+                            <p class="card-text"> Цена: {{ product.price }} рублей</p>
+                            <p class="card-text">В наличии: {{ product.stock }}</p>
+                            <a href="/contacts/" class="btn btn-primary mt-auto">Купить</a> 
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
