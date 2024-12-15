@@ -4,44 +4,44 @@ from fastapi.templating import Jinja2Templates
 import pandas as pd
 import os
 
-# Инициализация роутера для продуктов
+# Initialize router for products
 product_router = APIRouter()
 
-# Конфигурация Jinja для шаблонов
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Конфигурируем директорию шаблонов
+# Jinja configuration for templates
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Configuring the templates directory
 templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "../templates"))
 
 EXCEL_FILE_PATH = os.path.join(BASE_DIR, "../products.xlsx")
 
-# Функция для загрузки данных из Excel по категории
+# Function to load product data from Excel by category
 def load_products_from_excel(category: str = None):
     try:
-        # Загружаем Excel файл
+        # Load the Excel file
         df = pd.read_excel(EXCEL_FILE_PATH, sheet_name=0)
         
-        # Фильтруем по категории, если она указана
+        # Filter by category if specified
         if category:
             df = df[df["category"] == category]
         
-        # Преобразуем в список словарей
+        # Convert to a list of dictionaries
         products = df.to_dict(orient="records")
         return products
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error loading data from Excel: {str(e)}")
 
 
-# Общая функция для отображения страницы продуктов по категории
+# General function to display product page by category
 @product_router.get("/{category}", response_class=HTMLResponse)
 async def get_category_page(request: Request, category: str, name: str = None):
     try:
-        # Загружаем продукты для указанной категории
+        # Load products for the specified category
         products = load_products_from_excel(category)
         
-        # Если имя указано, фильтруем продукты по имени
+        # If name is specified, filter products by name
         if name:
             products = [product for product in products if name.lower() in product["name"].lower()]
         
-        # Возвращаем страницу с продуктами для данной категории
+        # Return page with products for the given category
         return templates.TemplateResponse(f"{category}.html", {"request": request, "products": products, "title": category.capitalize()})
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
