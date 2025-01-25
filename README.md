@@ -14,7 +14,7 @@
 
 #### Homework 3: Практика по тестам
 
-#### Homework 4: ДЗ
+#### Homework 4: Веб-приложение на FastAPI
 
 #### Homework 5: Docker контейнер c веб-приложением
 
