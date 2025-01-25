@@ -1,21 +1,25 @@
 # Dockerfile
-# Используйте базовый образ с Python
+# To build and run the container:
+# docker build -t fastapi-app .
+# docker run -p 8000:8000 fastapi-app
+
+# Use a minimal Python 3.10 image to reduce the size of the container and improve performance
 FROM python:3.10-slim
 
-# Установите рабочую директорию
-WORKDIR /hw5
+# Set working directory
+WORKDIR /app
 
-# Скопируйте файл зависимостей
-COPY requirements.txt .
+# Copy dependency file
+COPY requirements.txt ./
 
-# Установите зависимости
+# Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Скопируйте код приложения
+# Copy application code
 COPY . .
 
-# Откройте порт 8000 для приложения
+# Expose port for the application
 EXPOSE 8000
 
-# Запустите сервер uvicorn
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
+# Start the FastAPI application using Uvicorn
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
