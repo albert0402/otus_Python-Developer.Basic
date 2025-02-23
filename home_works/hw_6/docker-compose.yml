@@ -1,0 +1,37 @@
+version: '3.11'
+
+services:
+  pg:
+    image: postgres:16.4
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      POSTGRES_DB: blog
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: apppassword
+      PGDATA: /var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+
+  app:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - .:/app
+    working_dir: /app
+    depends_on:
+      pg:
+        condition: service_healthy
+    command: python main.py
+
+volumes:
+  pgdata:
