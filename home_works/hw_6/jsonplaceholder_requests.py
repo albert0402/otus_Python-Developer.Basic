@@ -20,11 +20,11 @@ async def fetch_api(url: str) -> List[Dict[str, Any]]:
 async def fetch_users_data() -> List[Dict[str, Any]]:
     """Fetches user data from the API and returns the list of users."""
     data = await fetch_api(USERS_DATA_URL)
-    logger.info("Fetched users: %s", data)
+    logger.info("Fetched %d users", len(data))
     return data
 
 async def fetch_posts_data() -> List[Dict[str, Any]]:
     """Fetches post data from the API and returns the list of posts."""
     data = await fetch_api(POSTS_DATA_URL)
-    logger.info("Fetched posts: %s", data)
+    logger.info("Fetched %d posts", len(data))
     return data

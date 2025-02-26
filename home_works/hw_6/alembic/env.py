@@ -4,19 +4,20 @@ from logging.config import fileConfig
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy import pool
 from alembic import context
-from config import db_url  # Импортируем URL базы из конфига
-from models.base import Base  # Импортируем базовый класс моделей
+from config import db_url  # Import the database URL from the config
+from models.base import Base  # Import the base model class
 
-# Настройка логирования
+# Logging configuration
 config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-target_metadata = Base.metadata  # Указываем метаданные моделей
+# Set metadata for Alembic migrations
+target_metadata = Base.metadata  
 
 
 def run_migrations_offline() -> None:
-    """Запуск миграций в offline-режиме."""
+    """Run migrations in offline mode."""
     context.configure(
         url=db_url,
         target_metadata=target_metadata,
@@ -29,7 +30,7 @@ def run_migrations_offline() -> None:
 
 
 async def run_migrations_online() -> None:
-    """Запуск миграций в online-режиме с асинхронным движком."""
+    """Run migrations in online mode using an asynchronous engine."""
     connectable = create_async_engine(db_url, poolclass=pool.NullPool, echo=True)
 
     async with connectable.connect() as connection:
@@ -37,11 +38,13 @@ async def run_migrations_online() -> None:
 
 
 def do_run_migrations(connection):
+    """Helper function to run migrations with a given connection."""
     context.configure(connection=connection, target_metadata=target_metadata)
     with context.begin_transaction():
         context.run_migrations()
 
 
+# Determine whether to run migrations in offline or online mode
 if context.is_offline_mode():
     run_migrations_offline()
 else:

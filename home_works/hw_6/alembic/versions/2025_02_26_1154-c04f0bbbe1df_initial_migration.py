@@ -12,17 +12,17 @@ from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
-# revision identifiers, used by Alembic.
+# Revision identifiers, used by Alembic.
 revision: str = "c04f0bbbe1df"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
 def upgrade() -> None:
-    # Включаем поддержку citext, если она не активна
+    # Enable citext extension if it is not already enabled
     op.execute("CREATE EXTENSION IF NOT EXISTS citext;")
     
-    # Создание таблицы тегов
+    # Create the "tag" table
     op.create_table(
         "tag",
         sa.Column("id", sa.BigInteger(), primary_key=True, autoincrement=True),
@@ -36,7 +36,7 @@ def upgrade() -> None:
         sa.UniqueConstraint("name", name=op.f("uq_tag_name")),
     )
     
-    # Создание таблицы пользователей
+    # Create the "users" table
     op.create_table(
         "users",
         sa.Column("id", sa.BigInteger(), primary_key=True, autoincrement=True),
@@ -47,7 +47,7 @@ def upgrade() -> None:
         sa.UniqueConstraint("username", name=op.f("uq_users_username")),
     )
     
-    # Создание таблицы постов
+    # Create the "post" table
     op.create_table(
         "post",
         sa.Column("id", sa.BigInteger(), primary_key=True, autoincrement=True),
@@ -67,7 +67,7 @@ def upgrade() -> None:
         ),
     )
     
-    # Создание таблицы связи постов и тегов
+    # Create the "post_tag_association" table (association between posts and tags)
     op.create_table(
         "post_tag_association",
         sa.Column("id", sa.BigInteger(), primary_key=True, autoincrement=True),
@@ -89,6 +89,7 @@ def upgrade() -> None:
     )
 
 def downgrade() -> None:
+    # Drop all tables in reverse order
     op.drop_table("post_tag_association")
     op.drop_table("post")
     op.drop_table("users")
