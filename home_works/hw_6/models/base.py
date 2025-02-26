@@ -1,5 +1,7 @@
+from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy import create_engine, event, MetaData
 from sqlalchemy.orm import DeclarativeBase, declared_attr, Mapped, mapped_column
+import asyncpg
 
 from config import db_url, convention
 
@@ -17,7 +19,7 @@ class Base(DeclarativeBase):
         return cls.__name__.lower()
 
 
-engine = create_engine(
+engine = create_async_engine(
     db_url,
     echo=True,  # Enable echo for debugging
 )
@@ -32,4 +34,4 @@ def set_foreign_keys_on(dbapi_conn, connection_record):
     cursor.close()
 
 
-event.listen(engine, "connect", set_foreign_keys_on)
+event.listen(engine.sync_engine, "connect", set_foreign_keys_on)
