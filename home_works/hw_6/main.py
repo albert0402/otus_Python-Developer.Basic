@@ -43,6 +43,11 @@ async def create_post(session: AsyncSession, post_data: dict):
         logger.warning(f"User with ID {post_data['userId']} not found. Skipping post.")
         return
 
+    existing_post = await session.execute(select(Post).where(Post.id == post_data["id"]))
+    if existing_post.scalars().first():
+        logger.info(f"Post with ID {post_data['id']} already exists. Skipping.")
+        return
+
     post = Post(
         id=post_data["id"],  # Use the ID from the API
         user_id=user_id,
