@@ -9,4 +9,6 @@ router = APIRouter()
 router.include_router(users_router, prefix="/users", tags=["Users"])
 router.include_router(posts_router, prefix="/posts", tags=["Posts"])
 router.include_router(tags_router, prefix="/tags", tags=["Tags"])
-router.include_router(publication_tags_router, prefix="/publication-tags", tags=["Publication Tags"])
+router.include_router(
+    publication_tags_router, prefix="/publication-tags", tags=["Publication Tags"]
+)

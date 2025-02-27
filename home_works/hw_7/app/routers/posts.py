@@ -6,6 +6,7 @@ from app.services.database import get_db
 
 router = APIRouter()
 
+
 @router.get("/")
 async def get_posts(db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(Post))

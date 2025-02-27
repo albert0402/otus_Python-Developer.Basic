@@ -12,22 +12,11 @@ class User(Base):
 
     __tablename__ = "users"
 
-    name: Mapped[str] = mapped_column(
-        String(200),
-        nullable=False
-    )
+    name: Mapped[str] = mapped_column(String(200), nullable=False)
 
-    username: Mapped[str] = mapped_column(
-        String(250),
-        unique=True,
-        nullable=False
-    )
-    
-    email: Mapped[str] = mapped_column(
-        String(250),
-        unique=True,
-        nullable=False
-    )
+    username: Mapped[str] = mapped_column(String(250), unique=True, nullable=False)
+
+    email: Mapped[str] = mapped_column(String(250), unique=True, nullable=False)
 
     posts: Mapped[list["Post"]] = relationship(
         back_populates="user",

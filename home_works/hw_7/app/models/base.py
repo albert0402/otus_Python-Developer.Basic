@@ -3,7 +3,7 @@ from sqlalchemy import create_engine, event, MetaData
 from sqlalchemy.orm import DeclarativeBase, declared_attr, Mapped, mapped_column
 import asyncpg
 
-from config import db_url, convention
+from app.config import db_url, convention
 
 
 class Base(DeclarativeBase):

@@ -7,4 +7,4 @@ convention = {
 }
 
 db_url = "postgresql+asyncpg://app:apppassword@localhost:5432/blog"
-db_echo = True  # Включает логирование SQL-запросов
+db_echo = True  # SQL logs on
