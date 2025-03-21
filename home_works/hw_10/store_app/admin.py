@@ -25,14 +25,14 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', 'get_categories', 'is_published', 'is_available')
+    list_display = ('name', 'price', 'get_categories', 'is_available')
     ordering = ('name', 'price')  
     search_fields = ('name', 'description')
     search_help_text = "Search by product name or description"
 
     fieldsets = (
         ('Product Info', {
-            'fields': ('name', 'description', 'categories', 'is_published', 'is_available') 
+            'fields': ('name', 'description', 'categories', 'is_available') 
         }),
         ('Pricing', {
             'fields': ('price',),
@@ -62,7 +62,6 @@ class ProductAdmin(admin.ModelAdmin):
             name="New Product",
             description="Default description",
             price=0.0,
-            is_published=False,
             is_available=True
         ).categories.add(category)  
         self.message_user(request, "New product added")
@@ -80,11 +79,6 @@ class ProductAdmin(admin.ModelAdmin):
     def set_price(self, request, queryset):
         updated_count = queryset.update(price=500.00)
         self.message_user(request, f"Price updated for {updated_count} product(s)")
-
-    @admin.action(description="Publish selected products")
-    def publish_products(self, request, queryset):
-        updated_count = queryset.update(is_published=True)
-        self.message_user(request, f"{updated_count} product(s) published")
 
     @admin.action(description="Mark as out of stock")
     def mark_out_of_stock(self, request, queryset):

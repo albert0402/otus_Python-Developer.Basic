@@ -42,7 +42,6 @@ INSTALLED_APPS = [
 - `price`: цена товара.
 - `created_at`: дата создания товара (автоматически заполняется).
 - `categories`: связь с категориями через `ManyToManyField`.
-- `is_published`: статус публикации товара.
 - `is_available`: статус доступности товара.
 
 ---
@@ -113,7 +112,7 @@ python manage.py dumpdata store_app --indent 4 > store_app/fixtures/dumped_data.
 
 ### Форма добавления и редактирования товара (`ProductModelForm`)
 - Настроена для работы с моделью `Product`.
-- Включает поля: `name`, `description`, `price`, `categories`, `is_published`, `is_available`.
+- Включает поля: `name`, `description`, `price`, `categories`, `is_available`.
 - Реализована валидация для цены и названия товара.
 
 ### Форма добавления и редактирования категории (`CategoryModelForm`)
@@ -126,7 +125,7 @@ python manage.py dumpdata store_app --indent 4 > store_app/fixtures/dumped_data.
 ## 7. Настройка админки
 
 ### Кастомизация админки для модели `Product`
-- `list_display`: Отображает поля `name`, `price`, `get_categories`, `is_published`, `is_available`.
+- `list_display`: Отображает поля `name`, `price`, `get_categories`, `is_available`.
 - `ordering`: Сортировка по названию и цене.
 - `search_fields`: Поиск по названию и описанию товара.
 - `fieldsets`: Группировка полей для удобства редактирования.

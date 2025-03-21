@@ -1,6 +1,5 @@
 from django.db import models
 
-
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True, null=True)
@@ -10,7 +9,7 @@ class Category(models.Model):
 
     def get_products(self):
         """Get all products"""
-        return self.product_set.all() 
+        return self.products.all()  # related_name="products"
 
 
 class Product(models.Model):
@@ -18,7 +17,6 @@ class Product(models.Model):
     description = models.TextField(blank=True, null=True)
     price = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
-    is_published = models.BooleanField(default=False)  
     is_available = models.BooleanField(default=True)
     categories = models.ManyToManyField(
         Category,
@@ -29,6 +27,6 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
-    def get_category_name(self):
-        """Get category name"""
-        return self.category.name if self.category else "Without category"
+    def get_category_names(self):
+        """Get all category names joined by comma"""
+        return ", ".join([cat.name for cat in self.categories.all()]) or "Без категории"
