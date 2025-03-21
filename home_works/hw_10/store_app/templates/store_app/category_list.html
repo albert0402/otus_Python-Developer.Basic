@@ -1,0 +1,29 @@
+{% extends 'store_app/base.html' %}
+
+{% block title %}Список категорий{% endblock %}
+
+{% block content %}
+  <div class="container mt-4">
+    <h1 class="mb-3">Список категорий</h1>
+
+    <!-- Кнопка для добавления новой категории -->
+    <div class="mb-3">
+      <a href="{% url 'add_category' %}" class="btn btn-success">Добавить категорию</a>
+    </div>
+
+    {% if categories %}
+      <ul class="list-group">
+        {% for category in categories %}
+          <li class="list-group-item">
+            <h5>{{ category.name }}</h5>
+            <p>Описание: {{ category.description|default:"Отсутствует" }}</p>
+            <!-- Кнопка для редактирования категории -->
+            <a href="{% url 'edit_category' category.id %}" class="btn btn-sm btn-primary">Редактировать</a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="alert alert-warning">Категории не найдены.</p>
+    {% endif %}
+  </div>
+{% endblock %}

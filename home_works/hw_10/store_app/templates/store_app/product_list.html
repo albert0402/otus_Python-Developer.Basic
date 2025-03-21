@@ -1,0 +1,84 @@
+{% extends 'store_app/base.html' %}
+
+{% block title %}Список товаров{% endblock %}
+
+{% block content %}
+  <div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 class="text-dark">Список товаров</h1>
+      <a href="{% url 'add_product' %}" class="btn btn-success">Добавить товар</a>
+    </div>
+
+    <!-- Форма фильтрации -->
+    <div class="card p-3 mb-4 border rounded">
+      <form method="get" class="d-flex flex-wrap align-items-end gap-3">
+        <div>
+          <label for="category" class="form-label">Категория</label>
+          <select name="category" id="category" class="form-control">
+            <option value="">Все категории</option>
+            {% for category in categories %}
+              <option value="{{ category.id }}" {% if request.GET.category == category.id|stringformat:"s" %}selected{% endif %}>
+                {{ category.name }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div>
+          <label for="min_price" class="form-label">Минимальная цена</label>
+          <input type="number" name="min_price" id="min_price" class="form-control" placeholder="Введите мин. цену"
+                 value="{{ request.GET.min_price }}">
+        </div>
+        <div>
+          <label for="max_price" class="form-label">Максимальная цена</label>
+          <input type="number" name="max_price" id="max_price" class="form-control" placeholder="Введите макс. цену"
+                 value="{{ request.GET.max_price }}">
+        </div>
+        <div>
+          <label for="sort" class="form-label">Сортировка</label>
+          <select name="sort" id="sort" class="form-control">
+            <option value="">По умолчанию</option>
+            <option value="date" {% if request.GET.sort == "date" %}selected{% endif %}>По дате добавления</option>
+            <option value="price_asc" {% if request.GET.sort == "price_asc" %}selected{% endif %}>По возрастанию цены</option>
+            <option value="price_desc" {% if request.GET.sort == "price_desc" %}selected{% endif %}>По убыванию цены</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Доступность</label>
+          <div class="form-check">
+            <input type="checkbox" name="in_stock" id="in_stock" class="form-check-input" {% if request.GET.in_stock %}checked{% endif %}>
+            <label for="in_stock" class="form-check-label">Товары в наличии</label>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" name="on_order" id="on_order" class="form-check-input" {% if request.GET.on_order %}checked{% endif %}>
+            <label for="on_order" class="form-check-label">Товары под заказ</label>
+          </div>
+        </div>
+        <div>
+          <button type="submit" class="btn btn-primary">Применить фильтр</button>
+        </div>
+      </form>
+    </div>
+
+    {% if products %}
+      <ul class="list-group">
+        {% for product in products %}
+          <li class="list-group-item">
+            <h5>
+              <a href="{% url 'product_detail' product.id %}" class="text-dark text-decoration-none">
+                {{ product.name }}
+              </a>
+            </h5>
+            <p class="text-muted">{{ product.description|default:"Описание отсутствует"|truncatewords:7 }}</p>
+            <p><strong class="text-dark">Цена:</strong> <span class="text-dark">{{ product.price }} ₽</span></p>
+            
+            {% if not product.is_available %}
+              <p class="text-muted small">⚠ Товара нет в наличии</p>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="alert alert-warning">Товары не найдены.</p>
+    {% endif %}
+  </div>
+{% endblock %}
