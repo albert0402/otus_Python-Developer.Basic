@@ -9,7 +9,7 @@ class Category(models.Model):
 
     def get_products(self):
         """Get all products"""
-        return self.products.all()  # related_name="products"
+        return self.products.all()
 
 
 class Product(models.Model):
