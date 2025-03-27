@@ -21,6 +21,17 @@ source .venv/bin/activate
 redis-server redis.conf --daemonize yes
 ```
 
+### Проверка работы Redis:
+```bash
+redis-cli ping  # Должно вернуть PONG
+```
+
+### Остановка работы Redis:
+```bash
+brew services stop redis
+ ```
+
+
 ### Во ВТОРОМ терминале - Celery (тоже в virtualenv)
 ```bash
 source .venv/bin/activate
