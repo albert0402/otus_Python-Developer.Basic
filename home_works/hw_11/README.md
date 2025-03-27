@@ -4,27 +4,84 @@
 
 ---
 
-## 1. Создание Django-проекта и приложения
+## Запускайте сервисы Магазина в правильном порядке
 
-### Создание нового проекта Django
+
+ПОЛНАЯ ПЕРЕЗАГРУЗКА
+# Остановите ВСЕ процессы принудительно
+sudo kill -9 $(ps aux | grep -E 'redis|celery|python3' | awk '{print $2}')
+
+# Убедитесь, что ничего не осталось
+ps aux | grep -E "redis|celery|python3" | grep -v grep
+
+
+### В ПЕРВОМ терминале - Redis (в virtualenv)
 ```bash
-django-admin startproject config .
-cd config
+source .venv/bin/activate
+redis-server redis.conf --daemonize yes
 ```
 
-### Создание нового приложения Django
+### Во ВТОРОМ терминале - Celery (тоже в virtualenv)
+```bash
+source .venv/bin/activate
+celery -A config worker --loglevel=debug --without-heartbeat --without-mingle --concurrency=1
+```
+
+### В ТРЕТЬЕМ терминале - Django (тоже в virtualenv)
+```bash
+source .venv/bin/activate
+python manage.py runserver
+```
+
+### В ЧЕТВЕРТОМ терминале - Django (тоже в virtualenv)
+Проверка на тестовой задаче: 
+```bash
+source .venv/bin/activate
+python manage.py shell
+
+from config.celery import app
+app.control.ping(timeout=5)  #[{'celery@MacBook-Pro-Albert.local': {'ok': 'pong'}}]
+
+from store_app.tasks import send_category_notification
+send_category_notification.delay(action="тест", category_id=1) # Успешно приходит сообщение
+```
+
+---
+
+## 1. Звпуск Django-проекта
+
+### Переход в директорию проекта Django
+```bash
+cd <project_folder>
+```
+
+### Запуск приложения Django
 ```bash
 python manage.py startapp store_app
 ```
 
-### Добавление приложения в `settings.py`
-Откройте `config/settings.py` и добавьте `'store_app'` в `INSTALLED_APPS`:
-```python
-INSTALLED_APPS = [
-    ...
-    'store_app',
-]
+
+## 2. Включение Redis в проекте на MacOS
+
+### Установка Redis (если не установлен)
+```bash
+brew install redis
 ```
+
+### Включение Redis
+```bash
+brew services start redis
+```
+
+### Проверка работы Redis:
+```bash
+redis-cli ping  # Должно вернуть PONG
+```
+
+### Остановка работы Redis:
+```bash
+brew services stop redis
+ ```
 
 ---
 

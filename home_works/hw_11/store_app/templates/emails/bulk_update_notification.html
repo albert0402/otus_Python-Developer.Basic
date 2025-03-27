@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ subject }}</title>
+</head>
+<body>
+    <h2>Сводка изменений в каталоге</h2>
+    
+    {% if changes.products %}
+    <h3>Изменения в товарах:</h3>
+    <ul>
+        {% for product in changes.products %}
+        <li>Товар "{{ product.name }}" (ID: {{ product.id }}) - {{ product.action }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    
+    {% if changes.categories %}
+    <h3>Изменения в категориях:</h3>
+    <ul>
+        {% for category in changes.categories %}
+        <li>Категория "{{ category.name }}" (ID: {{ category.id }}) - {{ category.action }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    
+    <p>Дата формирования отчета: {% now "DATETIME_FORMAT" %}</p>
+</body>
+</html>
