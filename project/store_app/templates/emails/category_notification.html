@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ subject }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; }
+        .notification { max-width: 600px; margin: 20px auto; padding: 20px; border: 1px solid #ddd; }
+        .footer { margin-top: 20px; font-size: 0.9em; color: #777; }
+    </style>
+</head>
+<body>
+    <div class="notification">
+        <h2>Уведомление об изменении категории</h2>
+        <p>Категория <strong>{{ category.name }}</strong> была {{ action }}.</p>
+        <p>ID: {{ category.id }}</p>
+        <div class="footer">
+            <p>Это автоматическое сообщение, пожалуйста, не отвечайте на него.</p>
+        </div>
+    </div>
+</body>
+</html>

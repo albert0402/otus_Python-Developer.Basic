@@ -24,10 +24,12 @@
 
 #### Homework 8: Django проект
 
-#### Homework 9: Django Generics
+#### Homework 9: Django с CBV (Class-Based Views) и использованием Pytest
 
-#### Homework 10: Тестирование Django приложения
+#### Homework 10: Django с CBV (Class-Based Views) и использованием Pytest
 
-#### Homework 11: GitHub Actions
+#### Homework 10: Django с Celery и Redis
 
-#### Homework 12: GitLab pipelines  
+#### Homework 12: GitHub Actions
+
+#### Homework 13: GitLab pipelines  

@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "store"
+version = "0.1.0"
+description = "bas store"
+authors = ["Albert <bolotnovalbert@mail.ru>"]
+packages = [
+    {include = "store_app"},
+    {include = "config"}
+]
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.12"
+django = "^5.0"
+celery = "^5.3"
+redis = "^4.6"
+requests = "^2.31"
+python-dotenv = "^1.0"
+django-celery-results = "^2.5"
+psycopg2-binary = "^2.9"
+gunicorn = "^21.2"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.0"
+pytest = "^8.0"
+pytest-django = "^4.7"
+pytest-cov = "^4.1"
+coverage = "^7.4"
+mypy = "^1.8"
+mypy-extensions = "^1.0"
+django-debug-toolbar = "^4.2"
+
+[build-system]
+requires = ["poetry-core>=2.0.0"]
+build-backend = "poetry.core.masonry.api"
