@@ -9,92 +9,57 @@ services:
       - media_volume:/app/mediafiles
     depends_on:
       web:
-        condition: service_started
-    restart: always
+        condition: service_healthy
     networks:
       - backend
 
   web:
     build: .
-    command: bash -c "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 4 --timeout 120"
+    command: bash -c "poetry install --no-root && poetry run python manage.py migrate && poetry run python manage.py collectstatic --noinput && poetry run gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 120"
     env_file:
       - .env
     volumes:
       - static_volume:/app/staticfiles
       - media_volume:/app/mediafiles
-    expose:
-      - "8000"
     depends_on:
       db:
         condition: service_healthy
       redis:
         condition: service_healthy
-    restart: always
+    healthcheck:
+      test: ["CMD", "poetry", "run", "python", "-c", "import requests; requests.get('http://localhost:8000/health/', timeout=2) or exit(1)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     networks:
       - backend
 
   db:
     image: postgres:14-alpine
     environment:
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: store_db
+      POSTGRES_USER: store_user
+      POSTGRES_PASSWORD: store_password
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      test: ["CMD-SHELL", "pg_isready -U store_user -d store_db"]
       interval: 5s
       timeout: 5s
       retries: 5
-    restart: always
     networks:
       - backend
 
   redis:
     image: redis:6-alpine
-    command: redis-server --requirepass ${REDIS_PASSWORD}
+    command: redis-server
     volumes:
       - redis_data:/data
     healthcheck:
-      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      test: ["CMD", "redis-cli", "ping"]
       interval: 5s
       timeout: 5s
       retries: 5
-    restart: always
-    networks:
-      - backend
-
-  celery:
-    build: .
-    command: celery -A config worker --loglevel=info --uid=celery --gid=celery
-    env_file:
-      - .env
-    volumes:
-      - static_volume:/app/staticfiles
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    restart: always
-    user: "celery:celery"
-    networks:
-      - backend
-
-  celery-beat:
-    build: .
-    command: celery -A config beat --loglevel=info --uid=celery --gid=celery
-    env_file:
-      - .env
-    volumes:
-      - static_volume:/app/staticfiles
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    restart: always
-    user: "celery:celery"
     networks:
       - backend
 

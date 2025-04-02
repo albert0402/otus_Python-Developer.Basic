@@ -1,12 +1,121 @@
 # Django Магазин 
 
-Этот проект представляет собой магазин на Django с расширенной функциональностью (с CBV (Class-Based Views) и использованием Pytest), включая управление товарами, категориями, формами и админкой.
+Этот проект представляет собой магазин на Django с расширенной функциональностью с CBV (Class-Based Views) и использованием Pytest, включая управление товарами, категориями, формами и админкой.
 
 ---
+# Последовательность запуска проекта через Docker
 
-## Последовательность запуска проекта
+## 1. Инициализация и сборка Docker-окружения
 
-### Poetry
+#### Проверка состояния Docker
+```bash
+docker info
+```
+
+#### Сборка и запуск контейнеров
+```bash
+docker-compose up -d --build
+```
+
+### Дополнительные команды Docker:
+
+#### Проверить статус контейнеров
+```bash
+docker-compose ps
+```
+
+#### Остановка текущих контейнеры
+```bash
+docker-compose down -v
+```
+
+#### Полный сброс всех контейнеров
+
+```bash
+docker-compose down --volumes --rmi all
+```
+
+#### Полная очистка Docker
+```bash
+docker system prune -a --volumes
+```
+
+
+## 2. Мониторинг работы Docker контейнеров  
+
+#### Просмотр логов работы контейнера проекта - web
+```bash
+docker-compose logs -f web
+```
+
+#### Просмотр логов работы контейнера прокси-сервера Nginx - nginx
+```bash
+docker-compose logs -f nginx
+```
+
+#### Просмотр логов работы контейнера брокера сообщений Redis - redis
+```bash
+docker-compose logs -f redis
+```
+
+#### Просмотр логов работы контейнера базы данных PostgreSQL - db
+```bash
+docker-compose logs -f db
+```
+
+
+## 3. Проверка работоспособности
+
+#### Проверка работы веб-приложения через Nginx (внешний доступ)
+```bash
+curl -v http://localhost
+```
+
+#### Проверка работы Django напрямую (внутри Docker-сети)
+```bash
+docker-compose exec nginx curl -v http://web:8000
+```
+
+#### Выполнение миграций
+```bash
+docker-compose exec web python manage.py migrate
+```
+
+## 4. Управление Django-приложением
+
+### Миграции:
+
+#### Создание миграций (после изменения моделей):
+```bash
+docker-compose exec web poetry run python manage.py makemigrations
+```
+
+#### Применение миграций к базе данных:
+```bash
+docker-compose exec web poetry run python manage.py migrate
+```
+
+#### Проверка статуса миграций:
+```bash
+docker-compose exec web poetry run python manage.py showmigrations
+```
+
+### Администрирование:
+#### Создание суперпользователя:
+```bash
+docker-compose exec web poetry run python manage.py createsuperuser
+```
+
+#### Запуск shell
+```bash
+docker-compose exec web poetry run python manage.py shell
+```
+
+--- 
+
+## Последовательность ручного запуска проекта 
+
+### 1. Poetry
 
 #### Создаем poetry в проекте
 ```bash
@@ -43,58 +152,15 @@ poetry install
 poetry lock
 ```
 
-
 #### Деактивация виртуального окружения poetry происходит после закрытия терминала
 
 
-## 2. Звпуск Docker файла с проектом
-
-
-#### Проверка статуса Docker
-```bash
-docker info
-```
-
-#### Собрать и запустить контейнеры
-```bash
-docker-compose up -d --build
-```
-
-#### Просмотр логов работы проекта
-```bash
-docker-compose logs -f web
-```
-
-#### Выполнение миграций
-```bash
-docker-compose exec web python manage.py migrate
-```
-
-#### Проверить статус контейнеров
-```bash
-docker-compose ps
-```
-
-#### Остановка текущих контейнеры
-```bash
-docker-compose down -v
-```
-
-#### Полный сброс всех контейнеров
-
-```bash
-docker-compose down --volumes --rmi all
-```
 
 
 ####
 ```bash
 
 ```
-
-
-
-
 
 
 

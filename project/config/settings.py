@@ -2,26 +2,14 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-# Загрузка переменных окружения
 load_dotenv()
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-fallback-key-for-dev-only')
-
-# SECURITY WARNING: don't run with debug turned on in production!
+SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
+ALLOWED_HOSTS = ['localhost', 'web', '127.0.0.1']
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1,web').split(',')
-
-# Для работы через Nginx/Proxy
-USE_X_FORWARDED_HOST = True
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', 'http://localhost,http://127.0.0.1').split(',')
-
-# Application definition
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -31,8 +19,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # My apps:
     "store_app.apps.StoreAppConfig",
-    # Celery apps:
     'django_celery_results',
+    'health_check',
 ]
 
 MIDDLEWARE = [
@@ -43,7 +31,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # Для статики в production
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -51,7 +38,7 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / 'templates'],  # Добавлен путь к общим шаблонам
+        "DIRS": [],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -66,19 +53,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-# Database
+# Database configuration for PostgreSQL
 DATABASES = {
     "default": {
-        "ENGINE": os.getenv('DB_ENGINE', 'django.db.backends.postgresql'),
-        "NAME": os.getenv('DB_NAME', 'store_db'),
-        "USER": os.getenv('DB_USER', 'store_user'),
-        "PASSWORD": os.getenv('DB_PASSWORD', 'store_password'),
-        "HOST": os.getenv('DB_HOST', 'db'),  # Имя сервиса в docker-compose
-        "PORT": os.getenv('DB_PORT', '5432'),
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv('POSTGRES_DB', 'store_db'),
+        "USER": os.getenv('POSTGRES_USER', 'store_user'),
+        "PASSWORD": os.getenv('POSTGRES_PASSWORD', 'store_password'),
+        "HOST": os.getenv('POSTGRES_HOST', 'db'),
+        "PORT": os.getenv('POSTGRES_PORT', '5432'),
     }
 }
 
-# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -94,60 +80,38 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
 LANGUAGE_CODE = "ru-ru"
-TIME_ZONE = "Europe/Moscow"  # Более подходящая таймзона для RU
+TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-STATIC_URL = "/static/"
-STATIC_ROOT = os.getenv('STATIC_ROOT', BASE_DIR / 'staticfiles')
-STATICFILES_DIRS = [BASE_DIR / 'static']  # Дополнительные папки со статикой
+STATIC_URL = os.getenv('STATIC_URL', 'static/')
+STATIC_ROOT = os.getenv('STATIC_ROOT', '/app/staticfiles')
 
 # Media files
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.getenv('MEDIA_ROOT', BASE_DIR / 'media')
+MEDIA_URL = os.getenv('MEDIA_URL', 'media/')
+MEDIA_ROOT = os.getenv('MEDIA_ROOT', '/app/mediafiles')
 
-# Default primary key field type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# Celery settings
-CELERY_BROKER_URL = os.getenv('REDIS_URL', 'redis://redis:6379/0')  # Имя сервиса в docker
+# Celery Configuration
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', 'redis://redis:6379/0')
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_TASK_IGNORE_RESULT = False
-CELERY_TIMEZONE = TIME_ZONE  # Синхронизация таймзоны с Django
 
-# Email settings
-EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
-EMAIL_HOST = os.getenv('EMAIL_HOST', '')
-EMAIL_PORT = os.getenv('EMAIL_PORT', '587')
+# Email Configuration
+EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
+EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.mail.ru')
+EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
 EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
-DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER', 'webmaster@localhost')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER)
 
 # Security settings for production
 if not DEBUG:
-    # HTTPS settings
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-    
-    # HSTS settings
-    SECURE_HSTS_SECONDS = 31536000  # 1 year
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
-    
-    # Static files
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-    
-    # Дополнительные настройки безопасности
-    SECURE_CONTENT_TYPE_NOSNIFF = True
-    SECURE_BROWSER_XSS_FILTER = True
-    X_FRAME_OPTIONS = 'DENY'
-else:
-    # Настройки для разработки
-    import socket
-    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
-    INTERNAL_IPS = [ip[:-1] + "1" for ip in ips] + ["127.0.0.1"]

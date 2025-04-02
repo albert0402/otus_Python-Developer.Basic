@@ -1,39 +1,32 @@
 FROM python:3.12-slim
 
-# Установка системных зависимостей
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpq-dev \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Создание пользователя и группы celery
-RUN groupadd -r celery && \
-    useradd -r -g celery celery && \
-    mkdir -p /home/celery && \
-    chown celery:celery /home/celery
-
-# Обновление pip и установка poetry
-RUN pip install --upgrade pip && pip install poetry
-
-# Рабочая директория
 WORKDIR /app
 
-# Копирование и установка зависимостей
-COPY pyproject.toml poetry.lock* ./
-RUN poetry config virtualenvs.create false && \
-    poetry install --no-interaction --no-ansi --only main --no-root
+# Установка Poetry
+ENV POETRY_VERSION=1.8.2
+RUN pip install "poetry==$POETRY_VERSION"
 
-# Копирование остальных файлов
+# Копируем зависимости
+COPY pyproject.toml poetry.lock* ./
+
+# Устанавливаем зависимости
+RUN poetry config virtualenvs.create false && \
+    poetry install --no-interaction --no-ansi --only main
+
+# Копируем остальные файлы
 COPY . .
 
-# Создание директорий для статики и медиа
+# Настройка прав для статики
 RUN mkdir -p /app/staticfiles /app/mediafiles && \
-    chown -R celery:celery /app/staticfiles /app/mediafiles
-
-# Разрешения для пользователя celery
-RUN chmod -R 755 /app/staticfiles /app/mediafiles
+    chown -R 1000:1000 /app/staticfiles /app/mediafiles && \
+    chmod -R 755 /app/staticfiles /app/mediafiles
 
 EXPOSE 8000
 
-# Рекомендуется указать USER, если приложение не требует root
-USER celery
+CMD ["poetry", "run", "gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3"]
