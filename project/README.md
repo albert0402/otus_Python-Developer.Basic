@@ -65,13 +65,26 @@ docker-compose up -d --build
 docker-compose logs -f web
 ```
 
+#### Выполнение миграций
+```bash
+docker-compose exec web python manage.py migrate
+```
+
+#### Проверить статус контейнеров
+```bash
+docker-compose ps
+```
 
 #### Остановка текущих контейнеры
 ```bash
 docker-compose down -v
 ```
 
+#### Полный сброс всех контейнеров
 
+```bash
+docker-compose down --volumes --rmi all
+```
 
 
 ####

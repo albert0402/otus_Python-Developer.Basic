@@ -4,7 +4,6 @@ from . import views
 urlpatterns = [
     path('', views.main_page, name='main_page'),
     path('about/', views.about, name='about'),
-    path('__debug__/', include('debug_toolbar.urls')),
 
     # Category URLs FBV (Function-Based Views)
     path('categories/', views.category_list, name='category_list'),
