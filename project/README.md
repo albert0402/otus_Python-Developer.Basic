@@ -3,103 +3,108 @@
 Этот проект представляет собой магазин на Django с расширенной функциональностью с CBV (Class-Based Views) и использованием Pytest, включая управление товарами, категориями, формами и админкой.
 
 ---
-# Последовательность запуска проекта через Docker
+## Последовательность запуска проекта через Docker
 
 
-## 1. Инициализация и сборка Docker-окружения
+### 1. Инициализация и сборка Docker-окружения
 
-#### Проверка состояния Docker
+#### Проверка состояния Docker:
 ```bash
 docker info
 ```
 
-#### Сборка и запуск контейнеров
+#### Сборка и запуск контейнеров:
 ```bash
 docker-compose up -d --build
 ```
 
-### Дополнительные команды Docker:
+### 1.1 Дополнительные команды Docker:
 
-#### Проверить статус контейнеров
+#### Проверить статус контейнеров:
 ```bash
 docker-compose ps
 ```
 
-#### Остановка текущих контейнеры
+#### Остановка текущих контейнеры:
 ```bash
 docker-compose down -v
 ```
 
-#### Полный сброс всех контейнеров
+#### Полный сброс всех контейнеров:
 ```bash
 docker-compose down --volumes --rmi local
 ```
 
-#### Полная очистка Docker
+#### Полная очистка Docker:
 Будьте осторожны - эта команда удалит ВСЕ неиспользуемые ресурсы Docker (образы, контейнеры, тома, сети) всей системы.
 ```bash
 docker system prune -a --volumes
 ```
 
 
-## 2. Мониторинг работы Docker контейнеров  
+### 2. Мониторинг работы Docker контейнеров  
 
-#### Просмотр логов работы всех контейнеров проекта
+#### Просмотр логов работы всех контейнеров проекта:
 ```bash
 docker-compose logs -f
 ```
 
-#### Просмотр логов работы контейнера проекта - web
+#### Просмотр логов работы контейнера проекта - web:
 ```bash
 docker-compose logs -f web
 ```
 
-#### Просмотр логов работы контейнера прокси-сервера Nginx - nginx
+#### Просмотр логов работы контейнера прокси-сервера Nginx - nginx:
 ```bash
 docker-compose logs -f nginx
 ```
 
-#### Просмотр логов работы контейнера брокера сообщений Redis - redis
+#### Просмотр логов работы контейнера брокера сообщений Redis - redis:
 ```bash
 docker-compose logs -f redis
 ```
 
-#### Просмотр логов работы контейнера базы данных PostgreSQL - db
+#### Просмотр логов работы контейнера базы данных PostgreSQL - db:
 ```bash
 docker-compose logs -f db
 ```
 
 
-## 3. Проверка работоспособности
+### 3. Проверка работоспособности
 
-#### Проверка работы веб-приложения через Nginx (внешний доступ)
+#### Проверка работы веб-приложения через Nginx (внешний доступ):
 ```bash
 curl -v http://localhost:8000
 ```
 
-#### Проверить соединение между контейнерами (внутри Docker-сети)
+#### Проверить соединение между контейнерами (внутри Docker-сети):
 ```bash
 docker-compose exec nginx curl -v http://web:8000
 ```
 
-#### Проверить работу Django
+#### Проверить работу Django:
 ```bash
 docker-compose exec web curl -v http://localhost:8000
 ```
 
-#### Проверка "здоровья" проекта
+#### Проверка "здоровья" проекта:
 ```bash
 docker-compose exec web curl http://web:8000/health/
 ```
 
-#### Проверка статики
+#### Проверка статики:
 ```bash
 curl -v http://localhost:8000/static/admin/css/base.css
 ```
 
-## 4. Управление Django-приложением
+### 4. Управление Django-приложением
 
-### Миграции:
+#### Автоматическое форматирование проекта к стандарту PEP-8:
+```bash
+poetry run black .
+```
+
+### 4.1 Миграции
 
 #### Создание миграций (после изменения моделей):
 ```bash
@@ -116,161 +121,257 @@ docker-compose exec web poetry run python manage.py migrate
 docker-compose exec web poetry run python manage.py showmigrations
 ```
 
-### Администрирование:
+### 4.2 Администрирование
+
 #### Создание суперпользователя:
 ```bash
 docker-compose exec web poetry run python manage.py createsuperuser
 ```
 
-#### Запуск shell
+#### Запуск shell:
 ```bash
 docker-compose exec web poetry run python manage.py shell
 ```
 
-#### Проверка работы Redis
+#### Проверка работы Redis:
 ```bash
 docker-compose exec redis redis-cli ping
 ```
 
---- 
 
-## Последовательность ручного запуска проекта 
+## 5. Управление Django-приложением через Makefile
 
-### 1. Poetry
+#### Список всех доступных команд Django-приложения:
+```bash
+make help
+```
 
-#### Создаем poetry в проекте
+### 5.1 Docker Utilities (Управление контейнерами)
+
+#### Просмотр логов всех сервисов в реальном времени:
+```bash
+make logs
+```
+
+#### Запуск контейнеров в фоновом режиме:
+```bash
+make up
+```
+
+#### Остановка и удаление контейнеров:
+```bash
+make down
+```
+
+#### Пересборка и перезапуск контейнеров:
+```bash
+make rebuild
+```
+
+### 5.2 Django Management (Управление Django)
+
+#### Применить миграции базы данных:
+```bash
+make migrate
+```
+
+#### Создать новые миграции после изменения моделей:
+```bash
+make makemigrations
+```
+
+#### Показать статус всех миграций:
+```bash
+make showmigrations
+```
+
+#### Создать суперпользователя Django:
+```bash
+make createsuperuser
+```
+
+#### Запустить Django shell:
+```bash
+make shell
+```
+
+#### Запустить тесты:
+```bash
+make test
+```
+
+#### Собрать статические файлы:
+```bash
+make collectstatic
+```
+
+####  Подключиться к PostgreSQL через psql:
+```bash
+make db-shell
+```
+
+#### Работа с Redis:
+```bash
+make redis-ping
+```
+
+---
+
+## Последовательность ручного запуска проекта
+
+### 1. Настройка Poetry и виртуального окружения
+
+#### Инициализация проекта (если ещё нет файла pyproject.toml):
 ```bash
 poetry init
 ```
 
-#### Получение информации о настройках poetry
+#### Добавление подзависимостей для воспроизводимости окружения(если ещё нет файла poetry.lock):
+```bash
+poetry lock
+```
+Нужно использовать:
+- после изменения pyproject.toml (добавили или удалили зависимости, изменили версионные ограничения);
+- для обновления зависимостей.
+
+
+#### Добавление основных зависимостей:
+```bash
+poetry add django gunicorn psycopg2-binary redis celery
+```
+
+#### Добавление dev-зависимостей:
+```bash
+poetry add --group dev pytest black isort flake8
+```
+
+#### Активация виртуального окружения:
+```bash
+poetry shell  # Автоматически активирует окружение
+```
+
+#### Установка всех зависимостей:
+```bash
+poetry install
+```
+
+#### Проверка окружения:
 ```bash
 poetry env info
 ```
 
-#### Добавление зависимостей
+
+### 2. Настройка и запуск сервисов
+
+#### Запуск PostgreSQL (если не установлен):
 ```bash
-poetry add django  # Пример основных зависимостей
-poetry add --group pytest black # Dev-зависимости 
+brew install postgresql
+brew services start postgresql
 ```
 
-#### Активация виртуального окружения poetry
+#### Создание БД (если не создана):
 ```bash
-poetry env activate
+createdb store_db -U store_user
 ```
 
-#### Проверка окружения poetry
-```bash
-poetry env list
-```
-
-#### Установка зависимостей poetry
-```bash
-poetry install
-```
-#### Установка зависимостей дополнительных зависимостей poetry
-```bash
-poetry lock
-```
-
-#### Деактивация виртуального окружения poetry происходит после закрытия терминала
-
-
-
-
-####
-```bash
-
-```
-
-
-
-
-
-
-
-
-
----
-
-## Запускайте сервисы Магазина в правильном порядке
-
-
-ПОЛНАЯ ПЕРЕЗАГРУЗКА
-# Остановите ВСЕ процессы принудительно
-sudo kill -9 $(ps aux | grep -E 'redis|celery|python3' | awk '{print $2}')
-
-# Убедитесь, что ничего не осталось
-ps aux | grep -E "redis|celery|python3" | grep -v grep
-
-
-### В ПЕРВОМ терминале - Redis (в virtualenv)
-```bash
-source .venv/bin/activate
-redis-server redis.conf --daemonize yes
-```
-
-### Во ВТОРОМ терминале - Celery (тоже в virtualenv)
-```bash
-source .venv/bin/activate
-celery -A config worker --loglevel=debug --without-heartbeat --without-mingle --concurrency=1
-```
-
-### В ТРЕТЬЕМ терминале - Django (тоже в virtualenv)
-```bash
-source .venv/bin/activate
-python manage.py runserver
-```
-
-### В ЧЕТВЕРТОМ терминале - Django (тоже в virtualenv)
-Проверка на тестовой задаче: 
-```bash
-source .venv/bin/activate
-python manage.py shell
-
-from config.celery import app
-app.control.ping(timeout=5)  #[{'celery@MacBook-Pro-Albert.local': {'ok': 'pong'}}]
-
-from store_app.tasks import send_category_notification
-send_category_notification.delay(action="тест", category_id=1) # Успешно приходит сообщение
-```
-
----
-
-## 1. Звпуск Django-проекта
-
-### Переход в директорию проекта Django
-```bash
-cd <project_folder>
-```
-
-### Запуск приложения Django
-```bash
-python manage.py startapp store_app
-```
-
-
-## 2. Включение Redis в проекте на MacOS
-
-### Установка Redis (если не установлен)
+#### Настройка Redis:
 ```bash
 brew install redis
-```
-
-### Включение Redis
-```bash
 brew services start redis
 ```
 
-### Проверка работы Redis:
+#### Проверка Redis:
 ```bash
-redis-cli ping  # Должно вернуть PONG
+redis-cli ping  # Должен вернуть PONG
 ```
 
-### Остановка работы Redis:
+
+### 3. Запуск проекта (в разных терминалах)
+
+#### Терминал 1 - Redis:
+```bash
+poetry shell
+redis-server
+```
+
+#### Терминал 2 - Celery:
+```bash
+poetry shell
+celery -A config worker --loglevel=info
+```
+
+#### Терминал 3 - Django сервер:
+```bash
+poetry shell
+python manage.py migrate
+python manage.py runserver
+```
+
+#### Терминал 4 - Gunicorn (для production-режима):
+```bash
+poetry shell
+gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 3
+```
+
+
+### 4. Управление проектом
+
+#### Применение миграций:
+```bash
+poetry run python manage.py migrate
+```
+
+#### Создание суперпользователя:
+```bash
+poetry run python manage.py createsuperuser
+```
+
+#### Запуск тестов:
+```bash
+poetry run pytest
+```
+
+#### Сбор статики:
+```bash
+poetry run python manage.py collectstatic
+```
+
+
+### 5. Остановка сервисов
+
+#### Остановка всех сервисов
+Остановка Django и Celery:
+```bash
+pkill -f "python manage.py runserver"
+pkill -f "celery worker"
+```
+Остановка Redis и PostgreSQL:
 ```bash
 brew services stop redis
- ```
+brew services stop postgresql
+```
+
+#### Проверка работающих процессов:
+```bash
+ps aux | grep -E "python|celery|redis|postgres"
+```
+
+#### Удаление виртуального окружения
+```bash
+poetry env remove python
+```
+
+#### Остановка всех сервисов
+```bash
+brew services stop --all
+```
+
+4. Для проверки работоспособности Celery:
+```bash
+poetry run python manage.py shell
+>>> from config.celery import app
+>>> app.control.ping()  # Должен вернуть pong
+```
 
 ---
 

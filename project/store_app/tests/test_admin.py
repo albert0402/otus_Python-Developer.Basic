@@ -37,7 +37,7 @@ def product(category):
         name="Test Product",
         description="Test Description",
         price=100.00,
-        is_available=True
+        is_available=True,
     )
     product.categories.add(category)
     return product
@@ -114,21 +114,26 @@ def test_mark_out_of_stock_action(request_factory, product):
 def test_category_admin_display():
     """Тестирование конфигурации отображения CategoryAdmin"""
     category_admin = CategoryAdmin(model=Category, admin_site=site)
-    
-    assert list(category_admin.list_display) == ['name', 'description']
-    assert category_admin.ordering == ('name',)
-    assert category_admin.search_fields == ('name', 'description')
+
+    assert list(category_admin.list_display) == ["name", "description"]
+    assert category_admin.ordering == ("name",)
+    assert category_admin.search_fields == ("name", "description")
 
 
 @pytest.mark.django_db
 def test_product_admin_display():
     """Тестирование конфигурации отображения ProductAdmin"""
     product_admin = ProductAdmin(model=Product, admin_site=site)
-    
-    assert list(product_admin.list_display) == ['name', 'price', 'get_categories', 'is_available']
-    assert product_admin.ordering == ('name', 'price')
-    assert product_admin.search_fields == ('name', 'description')
-    assert 'created_at' in product_admin.readonly_fields
+
+    assert list(product_admin.list_display) == [
+        "name",
+        "price",
+        "get_categories",
+        "is_available",
+    ]
+    assert product_admin.ordering == ("name", "price")
+    assert product_admin.search_fields == ("name", "description")
+    assert "created_at" in product_admin.readonly_fields
 
 
 @pytest.mark.django_db
@@ -136,6 +141,6 @@ def test_get_categories_method(product, category):
     """Тестирование метода get_categories для отображения категорий товара"""
     product_admin = ProductAdmin(model=Product, admin_site=site)
     result = product_admin.get_categories(product)
-    
+
     assert category.name in result
     assert result == "Test Category"

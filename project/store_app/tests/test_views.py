@@ -18,10 +18,7 @@ def category():
 @pytest.fixture
 def product(category):
     product = Product.objects.create(
-        name="Laptop", 
-        description="Gaming laptop", 
-        price=1500, 
-        is_available=True
+        name="Laptop", description="Gaming laptop", price=1500, is_available=True
     )
     product.categories.add(category)
     return product
@@ -58,8 +55,7 @@ def test_add_category_get(client):
 @pytest.mark.django_db
 def test_add_category_post(client):
     response = client.post(
-        reverse("add_category"), 
-        {"name": "Books", "description": "All kinds of books"}
+        reverse("add_category"), {"name": "Books", "description": "All kinds of books"}
     )
     assert response.status_code == 302
     assert Category.objects.filter(name="Books").exists()
@@ -75,8 +71,8 @@ def test_edit_category_get(client, category):
 @pytest.mark.django_db
 def test_edit_category_post(client, category):
     response = client.post(
-        reverse("edit_category", args=[category.id]), 
-        {"name": "Updated Tech", "description": "Updated"}
+        reverse("edit_category", args=[category.id]),
+        {"name": "Updated Tech", "description": "Updated"},
     )
     assert response.status_code == 302
     category.refresh_from_db()
@@ -142,9 +138,7 @@ def test_add_product_get(client):
 @pytest.mark.django_db
 def test_add_product_post(client, category):
     image = SimpleUploadedFile(
-        "test_image.jpg", 
-        b"file_content", 
-        content_type="image/jpeg"
+        "test_image.jpg", b"file_content", content_type="image/jpeg"
     )
     response = client.post(
         reverse("add_product"),
@@ -154,8 +148,8 @@ def test_add_product_post(client, category):
             "price": 500,
             "is_available": "on",
             "categories": [category.id],
-            "image": image
-        }
+            "image": image,
+        },
     )
     assert response.status_code == 302
     assert Product.objects.filter(name="Tablet").exists()
@@ -177,8 +171,8 @@ def test_edit_product_post(client, product, category):
             "description": "Updated model",
             "price": 1200,
             "is_available": "on",
-            "categories": [category.id]
-        }
+            "categories": [category.id],
+        },
     )
     assert response.status_code == 302
     product.refresh_from_db()

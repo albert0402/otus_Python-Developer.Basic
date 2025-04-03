@@ -3,9 +3,11 @@ services:
   nginx:
     image: nginx:1.23-alpine  # Облегченный образ nginx
     ports:
-      - "8000:80"  # Пробрасываем порт 80 контейнера на 8000 хоста для доступа из браузера
+      - "8000:443"  # Пробрасываем порт 443 контейнера на 8000 хоста для HTTPS
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf  # Монтируем конфиг nginx
+      - ./ssl/localhost.crt:/etc/ssl/certs/localhost.crt  # SSL-сертификат
+      - ./ssl/localhost.key:/etc/ssl/private/localhost.key  # SSL-ключ
       - static_volume:/app/staticfiles  # Общий том для статики
       - media_volume:/app/mediafiles  # Общий том для медиафайлов
     depends_on:
@@ -19,6 +21,9 @@ services:
     command: bash -c "poetry run python manage.py migrate && poetry run python manage.py collectstatic --noinput && poetry run gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 3"
     env_file:
       - .env  # Переменные окружения из файла
+    environment:
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      - REDIS_URL=${REDIS_URL}
     volumes:
       - .:/app  # Монтируем код для разработки (hot-reload)
       - static_volume:/app/staticfiles  # Общий том для статики
@@ -40,13 +45,13 @@ services:
   db:
     image: postgres:14-alpine  # Облегченный образ PostgreSQL
     environment:
-      POSTGRES_DB: store_db  # Имя БД
-      POSTGRES_USER: store_user  # Пользователь
-      POSTGRES_PASSWORD: store_password  # Пароль
+      POSTGRES_DB: ${POSTGRES_DB}  # Имя БД
+      POSTGRES_USER: ${POSTGRES_USER}  # Пользователь
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}  # Пароль
     volumes:
       - postgres_data:/var/lib/postgresql/data  # Том для хранения данных БД
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U store_user -d store_db"]  # Проверка готовности БД
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]  # Проверка готовности БД
       interval: 5s  # Частые проверки для БД
       timeout: 5s
       retries: 5

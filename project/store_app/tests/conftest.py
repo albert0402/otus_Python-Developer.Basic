@@ -1,10 +1,14 @@
 import pytest
 from store_app.models import Category, Product
 
+
 @pytest.fixture
 def category():
     """Фикстура для создания тестовой категории"""
-    return Category.objects.create(name="Test Category", description="Category Description")
+    return Category.objects.create(
+        name="Test Category", description="Category Description"
+    )
+
 
 @pytest.fixture
 def product(category):
@@ -13,5 +17,5 @@ def product(category):
         name="Test Product",
         description="Product Description",
         price=999.99,
-        is_available=True
+        is_available=True,
     )

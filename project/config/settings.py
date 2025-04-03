@@ -1,28 +1,50 @@
+"""
+Django settings for config project.
+
+Настройки используют переменные окружения из .env файла.
+"""
+
 import os
 from pathlib import Path
 from dotenv import load_dotenv
 
+# Загрузка переменных окружения из .env файла
 load_dotenv()
 
+# ======================
+# Базовые настройки
+# ======================
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv('SECRET_KEY')
-DEBUG = os.getenv('DEBUG', 'False') == 'True'
-ALLOWED_HOSTS = ['localhost', 'web', '127.0.0.1']
+# Критически важный секретный ключ! Никогда не публикуйте его в открытом доступе.
+SECRET_KEY = os.getenv("SECRET_KEY")
 
+# Разрешенные хосты (для production добавьте ваш домен)
+ALLOWED_HOSTS = [h.strip() for h in os.getenv("ALLOWED_HOSTS", "localhost, web, 127.0.0.1").split(",")]
+
+# ======================
+# Настройки приложений
+# ======================
 INSTALLED_APPS = [
+    # Стандартные приложения Django
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # My apps:
+    
+    # Пользовательские приложения
     "store_app.apps.StoreAppConfig",
-    'django_celery_results',
-    'health_check',
+    
+    # Сторонние приложения
+    "django_celery_results",  # Для хранения результатов Celery в БД
+    "health_check",           # Проверка здоровья сервисов
 ]
 
+# ======================
+# Промежуточное ПО (Middleware)
+# ======================
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -33,13 +55,16 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+# ======================
+# Настройки URL и шаблонов
+# ======================
 ROOT_URLCONF = "config.urls"
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [],
-        "APP_DIRS": True,
+        "APP_DIRS": True,  # Поиск шаблонов в папках templates приложений
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.debug",
@@ -53,18 +78,23 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-# Database configuration for PostgreSQL
+# ======================
+# Настройки базы данных (PostgreSQL)
+# ======================
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv('POSTGRES_DB', 'store_db'),
-        "USER": os.getenv('POSTGRES_USER', 'store_user'),
-        "PASSWORD": os.getenv('POSTGRES_PASSWORD', 'store_password'),
-        "HOST": os.getenv('POSTGRES_HOST', 'db'),
-        "PORT": os.getenv('POSTGRES_PORT', '5432'),
+        "NAME": os.getenv("POSTGRES_DB", "store_db"),
+        "USER": os.getenv("POSTGRES_USER", "store_user"),
+        "PASSWORD": os.getenv("POSTGRES_PASSWORD", "store_password"),
+        "HOST": os.getenv("POSTGRES_HOST", "db"),  # Использует сервис 'db' из docker-compose
+        "PORT": os.getenv("POSTGRES_PORT", "5432"),
     }
 }
 
+# ======================
+# Валидация паролей
+# ======================
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -80,38 +110,39 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LANGUAGE_CODE = "ru-ru"
-TIME_ZONE = "UTC"
-USE_I18N = True
-USE_TZ = True
+# ======================
+# Локализация и время
+# ======================
+LANGUAGE_CODE = "ru-ru"  # Русская локализация
+TIME_ZONE = "UTC"       # Временная зона по умолчанию
+USE_I18N = True         # Включение интернационализации
+USE_TZ = True           # Использование временных зон
 
-# Static files (CSS, JavaScript, Images)
-STATIC_URL = os.getenv('STATIC_URL', 'static/')
-STATIC_ROOT = os.getenv('STATIC_ROOT', '/app/staticfiles')
+# ======================
+# Статические и медиа файлы
+# ======================
+STATIC_URL = os.getenv("STATIC_URL", "static/")          # URL префикс для статических файлов
+STATIC_ROOT = os.getenv("STATIC_ROOT", "/app/staticfiles")  # Каталог для collectstatic
 
-# Media files
-MEDIA_URL = os.getenv('MEDIA_URL', 'media/')
-MEDIA_ROOT = os.getenv('MEDIA_ROOT', '/app/mediafiles')
+MEDIA_URL = os.getenv("MEDIA_URL", "media/")             # URL префикс для медиа файлов
+MEDIA_ROOT = os.getenv("MEDIA_ROOT", "/app/mediafiles")   # Каталог для загружаемых файлов
 
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"  # Автоматические первичные ключи
 
-# Celery Configuration
-CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', 'redis://redis:6379/0')
-CELERY_RESULT_BACKEND = 'django-db'
-CELERY_TASK_IGNORE_RESULT = False
+# ======================
+# Настройки Celery
+# ======================
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", "redis://redis:6379/0")  # Брокер сообщений
+CELERY_RESULT_BACKEND = "django-db"  # Хранение результатов в БД Django
+CELERY_TASK_IGNORE_RESULT = False    # Сохранять результаты выполнения задач
 
-# Email Configuration
-EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
-EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.mail.ru')
-EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
-EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER)
-
-# Security settings for production
-if not DEBUG:
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
+# ======================
+# Настройки email
+# ======================
+EMAIL_BACKEND = os.getenv("EMAIL_BACKEND", "django.core.mail.backends.smtp.EmailBackend")
+EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.mail.ru")       # SMTP сервер
+EMAIL_PORT = int(os.getenv("EMAIL_PORT", 587))            # Порт SMTP
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True") == "True"  # Использовать TLS
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")            # Логин от почты
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")    # Пароль от почты
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", EMAIL_HOST_USER)  # Email отправителя

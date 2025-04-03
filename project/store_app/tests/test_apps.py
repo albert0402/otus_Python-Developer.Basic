@@ -2,6 +2,7 @@ import pytest
 from django.apps import apps
 from store_app.apps import StoreAppConfig
 
+
 @pytest.mark.django_db
 def test_app_config():
     """Проверка конфигурации приложения"""

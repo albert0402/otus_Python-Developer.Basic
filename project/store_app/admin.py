@@ -4,16 +4,12 @@ from store_app.models import Category, Product
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description')  
-    ordering = ('name',) 
-    search_fields = ('name', 'description')
+    list_display = ("name", "description")
+    ordering = ("name",)
+    search_fields = ("name", "description")
     search_help_text = "Search by category name or description"
 
-    fieldsets = (
-        ('Category Details', {
-            'fields': ('name', 'description')
-        }),
-    )
+    fieldsets = (("Category Details", {"fields": ("name", "description")}),)
 
     actions = ["add_new_category"]
 
@@ -25,53 +21,67 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', 'get_categories', 'is_available')
-    ordering = ('name', 'price')  
-    search_fields = ('name', 'description')
+    list_display = ("name", "price", "get_categories", "is_available")
+    ordering = ("name", "price")
+    search_fields = ("name", "description")
     search_help_text = "Search by product name or description"
 
     fieldsets = (
-        ('Product Info', {
-            'fields': ('name', 'description', 'categories', 'is_available') 
-        }),
-        ('Pricing', {
-            'fields': ('price',),
-        }),
-        ('Metadata', {
-            'fields': ('created_at',),
-            'classes': ('collapse',),
-        }),
+        (
+            "Product Info",
+            {"fields": ("name", "description", "categories", "is_available")},
+        ),
+        (
+            "Pricing",
+            {
+                "fields": ("price",),
+            },
+        ),
+        (
+            "Metadata",
+            {
+                "fields": ("created_at",),
+                "classes": ("collapse",),
+            },
+        ),
     )
 
-    readonly_fields = ('created_at',)
+    readonly_fields = ("created_at",)
 
-    actions = ["add_new_product", "update_product_details", "set_price", "publish_products", "mark_out_of_stock"]
+    actions = [
+        "add_new_product",
+        "update_product_details",
+        "set_price",
+        "publish_products",
+        "mark_out_of_stock",
+    ]
 
     def get_categories(self, obj):
-        return ", ".join([category.name for category in obj.categories.all()])  
-    get_categories.short_description = 'Категории'
+        return ", ".join([category.name for category in obj.categories.all()])
+
+    get_categories.short_description = "Категории"
 
     @admin.action(description="Add new product")
     def add_new_product(self, request, queryset):
         if Category.objects.exists():
             category = Category.objects.first()
         else:
-            category = Category.objects.create(name="Default Category", description="Auto-created")
-        
+            category = Category.objects.create(
+                name="Default Category", description="Auto-created"
+            )
+
         Product.objects.create(
             name="New Product",
             description="Default description",
             price=0.0,
-            is_available=True
-        ).categories.add(category)  
+            is_available=True,
+        ).categories.add(category)
         self.message_user(request, "New product added")
 
     @admin.action(description="Update product details")
     def update_product_details(self, request, queryset):
         updated_count = queryset.update(
-            name="Updated Product",
-            description="Updated description",
-            price=99.99
+            name="Updated Product", description="Updated description", price=99.99
         )
         self.message_user(request, f"{updated_count} product(s) updated")
 
