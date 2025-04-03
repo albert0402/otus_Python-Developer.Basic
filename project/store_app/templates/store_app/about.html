@@ -1,8 +1,67 @@
 {% extends 'store_app/base.html' %}
 
-{% block title %} О магазине {% endblock %}
+{% block title %}О магазине{% endblock %}
 
 {% block content %}
-    <h1>О магазине</h1>
-     <p> Это страница о магазине.</p>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <h1 class="mb-4 text-center">О нашем магазине</h1>
+            
+            <div class="text-center mb-4">
+                <img src="/pictures/shop.jpg" class="img-fluid rounded shadow" alt="Фото магазина" style="max-height: 400px;">
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <p class="card-text">Наш магазин автозапчастей возглавляет опытный и увлеченный автомобилист, который всю свою жизнь посвятил автомобилям и всему, что с ними связано.</p>
+                    <p class="card-text">Мы работаем на рынке более 20 лет, предоставляя клиентам качественные товары и высокий уровень обслуживания.</p>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="h5 mb-0">Мы предлагаем:</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Запчасти для ТО</li>
+                                <li class="list-group-item">Аккумуляторы и принадлежности</li>
+                                <li class="list-group-item">Масла и жидкости</li>
+                                <li class="list-group-item">Автокосметика и автохимия</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Аксессуары</li>
+                                <li class="list-group-item">Автомобильный инструмент</li>
+                                <li class="list-group-item">Лампы и щетки</li>
+                                <li class="list-group-item">Качественный подбор запчастей</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h2 class="h5 mb-0">Способы оплаты:</h2>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Наличный расчет</li>
+                        <li class="list-group-item">Безналичный расчет</li>
+                        <li class="list-group-item">Оплата банковскими картами</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="alert alert-info text-center">
+                <h3 class="h4">Доверьтесь профессионалам – ваш автомобиль заслуживает лучшего!</h3>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

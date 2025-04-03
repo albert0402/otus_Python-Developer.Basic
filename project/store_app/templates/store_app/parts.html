@@ -1,0 +1,59 @@
+{% extends 'store_app/base.html' %}
+
+{% block title %}Подбор автозапчастей{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h1 class="h4 mb-0 text-center">Качественный подбор автозапчастей</h1>
+                </div>
+                <div class="card-body">
+                    <p class="lead">Мы предлагаем надежный и быстрый подбор автозапчастей для всех марок автомобилей.</p>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h2 class="h5 card-title">Наши преимущества</h2>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">20+ лет на рынке</li>
+                                        <li class="list-group-item">Оригинальные запчасти</li>
+                                        <li class="list-group-item">Профессиональные консультации</li>
+                                        <li class="list-group-item">Гарантия качества</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h2 class="h5 card-title">Категории запчастей</h2>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">Двигатель и трансмиссия</li>
+                                        <li class="list-group-item">Подвеска и рулевое</li>
+                                        <li class="list-group-item">Тормозные системы</li>
+                                        <li class="list-group-item">Электрика и электроника</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info mt-4">
+                        <p class="mb-0">Не теряйте время на поиски - наши специалисты подберут оптимальные запчасти для вашего автомобиля!</p>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <a href="/contact/" class="btn btn-primary btn-lg">
+                            <i class="fas fa-phone-alt mr-2"></i>Заказать подбор запчастей
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

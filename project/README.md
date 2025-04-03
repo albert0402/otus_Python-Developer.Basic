@@ -2,8 +2,34 @@
 
 Этот проект представляет собой магазин на Django с расширенной функциональностью с CBV (Class-Based Views) и использованием Pytest, включая управление товарами, категориями, формами и админкой.
 
+
 ---
-## Последовательность запуска проекта через Docker
+
+## Быстрый старт проекта
+
+#### Проверка состояния Docker:
+```bash
+docker info
+```
+
+#### Сборка и запуск контейнеров:
+```bash
+docker-compose up -d --build
+```
+
+#### Загрузка категорий в интернет магазин:
+```bash
+docker-compose exec web poetry run python manage.py loaddata store_app/fixtures/categories.json
+```
+
+#### Загрузка товаров в интернет магазин:
+```bash
+docker-compose exec web poetry run python manage.py loaddata store_app/fixtures/products.json
+```
+
+---
+
+## Полная последовательность запуска проекта через Docker
 
 
 ### 1. Инициализация и сборка Docker-окружения
@@ -246,7 +272,7 @@ make redis-ping
 
 ---
 
-## Последовательность ручного запуска проекта
+## Полная последовательность ручного запуска проекта
 
 ### 1. Настройка Poetry и виртуального окружения
 

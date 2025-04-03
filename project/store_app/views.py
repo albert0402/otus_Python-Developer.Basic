@@ -13,12 +13,35 @@ from .forms import ProductModelForm, CategoryModelForm
 from .tasks import send_category_notification, send_product_notification
 
 
+# --------- Main pages ---------
+
+
 def main_page(request):
     return render(request, "store_app/home.html")
 
 
 def about(request):
     return render(request, "store_app/about.html")
+
+
+def parts(request):
+    """Представление для страницы подбора запчастей"""
+    return render(request, "store_app/parts.html")
+
+
+def delivery(request):
+    """Представление для страницы условий доставки"""
+    return render(request, "store_app/delivery.html")
+
+
+def map_page(request):
+    """Представление для страницы с картой проезда"""
+    return render(request, "store_app/map_page.html")
+
+
+def contact(request):
+    """Представление для страницы контактов"""
+    return render(request, "store_app/contact.html")
 
 
 # --------- Categories ---------

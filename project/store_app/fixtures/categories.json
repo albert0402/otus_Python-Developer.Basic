@@ -4,7 +4,8 @@
     "pk": 1,
     "fields": {
       "name": "Фильтра",
-      "description": "Различные виды фильтров для автомобилей"
+      "description": "Различные виды фильтров для автомобилей",
+      "image": "categories/filters.jpg"
     }
   },
   {
@@ -12,7 +13,8 @@
     "pk": 2,
     "fields": {
       "name": "Масла",
-      "description": "Моторные и трансмиссионные масла"
+      "description": "Моторные и трансмиссионные масла",
+      "image": "categories/oil.jpg"
     }
   },
   {
@@ -20,7 +22,8 @@
     "pk": 3,
     "fields": {
       "name": "Аккумуляторы",
-      "description": "Автомобильные аккумуляторы различных типов"
+      "description": "Автомобильные аккумуляторы различных типов",
+      "image": "categories/battery.jpg"
     }
   },
   {
@@ -28,7 +31,8 @@
     "pk": 4,
     "fields": {
       "name": "Косметика",
-      "description": "Средства по уходу за автомобилем"
+      "description": "Средства по уходу за автомобилем",
+      "image": "categories/cosmetics.jpg"
     }
   },
   {
@@ -36,7 +40,8 @@
     "pk": 5,
     "fields": {
       "name": "Инструменты",
-      "description": "Автомобильные инструменты"
+      "description": "Автомобильные инструменты",
+      "image": "categories/tools.jpg"
     }
   },
   {
@@ -44,7 +49,8 @@
     "pk": 6,
     "fields": {
       "name": "Лампочки",
-      "description": "Осветительные приборы для автомобилей"
+      "description": "Осветительные приборы для автомобилей",
+      "image": "categories/lights.jpg"
     }
   },
   {
@@ -52,7 +58,8 @@
     "pk": 7,
     "fields": {
       "name": "Щетки",
-      "description": "Щетки стеклоочистителей"
+      "description": "Щетки стеклоочистителей",
+      "image": "categories/wipers.jpg"
     }
   },
   {
@@ -60,7 +67,8 @@
     "pk": 8,
     "fields": {
       "name": "Аксессуары",
-      "description": "Различные автомобильные аксессуары"
+      "description": "Различные автомобильные аксессуары",
+      "image": "categories/accessories.jpg"
     }
   }
 ]

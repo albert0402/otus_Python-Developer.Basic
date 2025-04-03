@@ -1,11 +1,11 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/">Магазин</a>
+        <a class="navbar-brand" href="/">Автозапчасти</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
+            <ul class="navbar-nav me-auto">
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/">Главная</a>
                 </li>
@@ -15,7 +15,30 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/products/">Товары</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about/">О магазине</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/parts/">Подбор запчастей</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="deliveryDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Доставка
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="deliveryDropdown">
+                        <li><a class="dropdown-item" href="/delivery/">Условия доставки</a></li>
+                        <li><a class="dropdown-item" href="/map_page/">Как добраться</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/contact/">Контакты</a>
+                </li>
             </ul>
+            <div class="d-flex">
+                <a href="tel:+79999999999" class="btn btn-outline-light me-2">
+                    <i class="fas fa-phone-alt me-1"></i> +7 (999) 999-99-99
+                </a>
+            </div>
         </div>
     </div>
 </nav>

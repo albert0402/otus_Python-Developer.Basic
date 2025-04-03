@@ -1,0 +1,124 @@
+{% extends 'store_app/base.html' %}
+
+{% block title %}Как добраться{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <h1 class="mb-4 text-center">Как добраться до магазина</h1>
+            
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="h5 mb-0">Адрес магазина</h2>
+                </div>
+                <div class="card-body">
+                    <p><i class="fas fa-map-marker-alt mr-2"></i> г. Москва, Белореченская улица, 22/66</p>
+                    <a href="https://yandex.ru/maps/213/moscow/?ll=37.768695%2C55.665584&mode=poi&poi%5Bpoint%5D=37.768575%2C55.665651&poi%5Buri%5D=ymapsbm1%3A%2F%2Forg%3Foid%3D86055035670&z=20.41" 
+                       target="_blank" class="btn btn-outline-primary">
+                        <i class="fas fa-external-link-alt mr-2"></i>Открыть в Яндекс.Картах
+                    </a>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h2 class="h5 mb-0">Из метро Марьино</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h3 class="h6 card-title">Пешком</h3>
+                                    <ol class="pl-3">
+                                        <li>Выйдите через северный вестибюль</li>
+                                        <li>Идите по Люблинской улице</li>
+                                        <li>Поверните налево на Белореченскую</li>
+                                        <li>Идите до дома №22/66 (~10 мин)</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h3 class="h6 card-title">На автобусе</h3>
+                                    <ul class="pl-3">
+                                        <li>Автобусы №112 или №280</li>
+                                        <li>Выходите на "Белореченская ул., 22"</li>
+                                        <li>Пройдите 2-3 минуты пешком</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h2 class="h5 mb-0">Из метро Братиславская</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h3 class="h6 card-title">Пешком</h3>
+                                    <ol class="pl-3">
+                                        <li>Выйдите через южный вестибюль</li>
+                                        <li>Идите по улице Перерва</li>
+                                        <li>Поверните направо на Белореченскую</li>
+                                        <li>Идите до дома №22/66 (~15 мин)</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h3 class="h6 card-title">На автобусе</h3>
+                                    <ul class="pl-3">
+                                        <li>Автобусы №657 или №280</li>
+                                        <li>Выходите на "Белореченская ул., 22"</li>
+                                        <li>Пройдите 3 минуты пешком</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h2 class="h5 mb-0">Карта проезда</h2>
+                </div>
+                <div class="card-body p-0">
+                    <div id="map" style="width: 100%; height: 400px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=4ab8b86e-0179-40f1-8405-223ff16ebaa3" type="text/javascript"></script>
+<script>
+    ymaps.ready(function () {
+        var myMap = new ymaps.Map("map", {
+            center: [55.665553, 37.768579],
+            zoom: 16,
+            controls: ['zoomControl', 'typeSelector', 'fullscreenControl']
+        });
+
+        var myPlacemark = new ymaps.Placemark([55.665553, 37.768579], {
+            balloonContent: 'Магазин автозапчастей<br>Белореченская ул., 22/66'
+        }, {
+            preset: 'islands#redIcon'
+        });
+
+        myMap.geoObjects.add(myPlacemark);
+    });
+</script>
+{% endblock %}
