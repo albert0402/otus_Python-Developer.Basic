@@ -5,6 +5,7 @@
 ---
 # Последовательность запуска проекта через Docker
 
+
 ## 1. Инициализация и сборка Docker-окружения
 
 #### Проверка состояния Docker
@@ -30,18 +31,23 @@ docker-compose down -v
 ```
 
 #### Полный сброс всех контейнеров
-
 ```bash
-docker-compose down --volumes --rmi all
+docker-compose down --volumes --rmi local
 ```
 
 #### Полная очистка Docker
+Будьте осторожны - эта команда удалит ВСЕ неиспользуемые ресурсы Docker (образы, контейнеры, тома, сети) всей системы.
 ```bash
 docker system prune -a --volumes
 ```
 
 
 ## 2. Мониторинг работы Docker контейнеров  
+
+#### Просмотр логов работы всех контейнеров проекта
+```bash
+docker-compose logs -f
+```
 
 #### Просмотр логов работы контейнера проекта - web
 ```bash
@@ -68,17 +74,27 @@ docker-compose logs -f db
 
 #### Проверка работы веб-приложения через Nginx (внешний доступ)
 ```bash
-curl -v http://localhost
+curl -v http://localhost:8000
 ```
 
-#### Проверка работы Django напрямую (внутри Docker-сети)
+#### Проверить соединение между контейнерами (внутри Docker-сети)
 ```bash
 docker-compose exec nginx curl -v http://web:8000
 ```
 
-#### Выполнение миграций
+#### Проверить работу Django
 ```bash
-docker-compose exec web python manage.py migrate
+docker-compose exec web curl -v http://localhost:8000
+```
+
+#### Проверка "здоровья" проекта
+```bash
+docker-compose exec web curl http://web:8000/health/
+```
+
+#### Проверка статики
+```bash
+curl -v http://localhost:8000/static/admin/css/base.css
 ```
 
 ## 4. Управление Django-приложением
@@ -109,6 +125,11 @@ docker-compose exec web poetry run python manage.py createsuperuser
 #### Запуск shell
 ```bash
 docker-compose exec web poetry run python manage.py shell
+```
+
+#### Проверка работы Redis
+```bash
+docker-compose exec redis redis-cli ping
 ```
 
 --- 
