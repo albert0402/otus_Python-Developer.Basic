@@ -6,13 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('store_app', '0008_alter_category_image'),
+        ("store_app", "0008_alter_category_image"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='category',
-            name='image',
-            field=models.CharField(blank=True, default='', help_text="Путь к изображению относительно папки static (например: 'categories/filters.jpg')", max_length=255),
+            model_name="category",
+            name="image",
+            field=models.CharField(
+                blank=True,
+                default="",
+                help_text="Путь к изображению относительно папки static (например: 'categories/filters.jpg')",
+                max_length=255,
+            ),
         ),
     ]

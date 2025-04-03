@@ -2,7 +2,6 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    
     # Основные страницы
     path("", views.main_page, name="main_page"),
     path("about/", views.about, name="about"),
@@ -10,7 +9,6 @@ urlpatterns = [
     path("delivery/", views.delivery, name="delivery"),
     path("map_page/", views.map_page, name="map_page"),
     path("contact/", views.contact, name="contact"),
-    
     # Category URLs FBV (Function-Based Views)
     path("categories/", views.category_list, name="category_list"),
     path("categories/add/", views.add_category, name="add_category"),
