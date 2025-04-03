@@ -13,6 +13,97 @@ from .forms import ProductModelForm, CategoryModelForm
 from .tasks import send_category_notification, send_product_notification
 
 
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import Product, Order, OrderItem
+from .forms import CartAddProductForm, CheckoutForm
+
+@login_required
+def cart_detail(request):
+    order, created = Order.objects.get_or_create(
+        user=request.user, 
+        status='PENDING',
+        defaults={'total_price': 0}
+    )
+    return render(request, 'store_app/cart.html', {'order': order})
+
+@login_required
+def add_to_cart(request, product_id):
+    if request.method == 'POST':
+        product = get_object_or_404(Product, id=product_id)
+        
+        if not product.is_available:
+            messages.error(request, "Этот товар временно отсутствует")
+            return redirect('product_detail', product_id=product.id)
+            
+        quantity = int(request.POST.get('quantity', 1))
+        
+        # Получаем или создаем корзину
+        order, created = Order.objects.get_or_create(
+            user=request.user,
+            status='PENDING',
+            defaults={'total_price': 0}
+        )
+        
+        # Обновляем или создаем позицию в заказе
+        order_item, created = OrderItem.objects.get_or_create(
+            order=order,
+            product=product,
+            defaults={'price': product.price, 'quantity': 0}
+        )
+        
+        order_item.quantity += quantity
+        order_item.save()
+        
+        # Обновляем общую сумму заказа
+        order.update_total()
+        
+        messages.success(request, f"Добавлено {quantity} шт. {product.name}")
+        return redirect('cart_detail')
+        
+    return redirect('product_list')
+
+@login_required
+def update_cart(request, item_id):
+    item = get_object_or_404(OrderItem, id=item_id, order__user=request.user)
+    if request.method == 'POST':
+        quantity = int(request.POST.get('quantity', 1))
+        if quantity > 0:
+            item.quantity = quantity
+            item.save()
+            item.order.update_total()
+    return redirect('cart_detail')
+
+@login_required
+def remove_from_cart(request, item_id):
+    item = get_object_or_404(OrderItem, id=item_id, order__user=request.user)
+    item.delete()
+    item.order.update_total()
+    return redirect('cart_detail')
+
+@login_required
+def checkout(request):
+    order = get_object_or_404(Order, user=request.user, status='PENDING')
+    if request.method == 'POST':
+        form = CheckoutForm(request.POST)
+        if form.is_valid():
+            order.phone = form.cleaned_data['phone']
+            order.address = form.cleaned_data['address']
+            order.comment = form.cleaned_data['comment']
+            order.status = 'COMPLETED'
+            order.save()
+            # Создаем новую корзину
+            Order.objects.create(user=request.user, status='PENDING', total_price=0)
+            return render(request, 'store_app/order_confirmation.html')
+    else:
+        initial = {
+            'phone': order.user.phone,
+            'address': order.user.address
+        }
+        form = CheckoutForm(initial=initial)
+    return render(request, 'store_app/checkout.html', {'form': form, 'order': order})
+
+
 # --------- Main pages ---------
 
 

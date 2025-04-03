@@ -1,0 +1,61 @@
+{% extends 'store_app/base.html' %}
+{% block title %}Оформление заказа{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Оформление заказа</h1>
+    
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="h5 mb-0">Ваш заказ</h2>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        {% for item in order.items.all %}
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>{{ item.product.name }} x{{ item.quantity }}</span>
+                            <span>{{ item.total_price }} ₽</span>
+                        </li>
+                        {% endfor %}
+                        <li class="list-group-item d-flex justify-content-between fw-bold">
+                            <span>Итого:</span>
+                            <span>{{ order.total_price }} ₽</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h2 class="h5 mb-0">Контактная информация</h2>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            {{ form.phone.label_tag }}
+                            {{ form.phone }}
+                            <div class="form-text">Пример: +7 999 123-45-67</div>
+                        </div>
+                        <div class="mb-3">
+                            {{ form.address.label_tag }}
+                            {{ form.address }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.comment.label_tag }}
+                            {{ form.comment }}
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                            Подтвердить заказ
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

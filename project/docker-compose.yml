@@ -43,6 +43,7 @@ services:
     
     # Дополнительные переменные окружения:
     environment:
+      - DJANGO_SKIP_MIGRATIONS=1 # Временно !!!  TODO: FIX
       - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}  # URL БД
       - REDIS_URL=${REDIS_URL}  # URL Redis
     
