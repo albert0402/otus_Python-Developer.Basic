@@ -1,0 +1,66 @@
+[
+  {
+    "model": "store_app.Category",
+    "pk": 1,
+    "fields": {
+      "name": "Фильтра",
+      "description": "Различные виды фильтров для автомобилей"
+    }
+  },
+  {
+    "model": "store_app.Category",
+    "pk": 2,
+    "fields": {
+      "name": "Масла",
+      "description": "Моторные и трансмиссионные масла"
+    }
+  },
+  {
+    "model": "store_app.Category",
+    "pk": 3,
+    "fields": {
+      "name": "Аккумуляторы",
+      "description": "Автомобильные аккумуляторы различных типов"
+    }
+  },
+  {
+    "model": "store_app.Category",
+    "pk": 4,
+    "fields": {
+      "name": "Косметика",
+      "description": "Средства по уходу за автомобилем"
+    }
+  },
+  {
+    "model": "store_app.Category",
+    "pk": 5,
+    "fields": {
+      "name": "Инструменты",
+      "description": "Автомобильные инструменты"
+    }
+  },
+  {
+    "model": "store_app.Category",
+    "pk": 6,
+    "fields": {
+      "name": "Лампочки",
+      "description": "Осветительные приборы для автомобилей"
+    }
+  },
+  {
+    "model": "store_app.Category",
+    "pk": 7,
+    "fields": {
+      "name": "Щетки",
+      "description": "Щетки стеклоочистителей"
+    }
+  },
+  {
+    "model": "store_app.Category",
+    "pk": 8,
+    "fields": {
+      "name": "Аксессуары",
+      "description": "Различные автомобильные аксессуары"
+    }
+  }
+]

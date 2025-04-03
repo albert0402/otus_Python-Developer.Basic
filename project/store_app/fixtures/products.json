@@ -1,0 +1,541 @@
+[
+  {
+    "model": "store_app.Product",
+    "pk": 1,
+    "fields": {
+      "name": "Фильтр для двигателя, синтетический",
+      "description": "Высококачественный синтетический фильтр",
+      "price": 17.99,
+      "is_available": true,
+      "categories": [1]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 2,
+    "fields": {
+      "name": "Фильтр для воздуха, высокоэффективный",
+      "description": "Обеспечивает отличную фильтрацию воздуха",
+      "price": 14.50,
+      "is_available": true,
+      "categories": [1]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 3,
+    "fields": {
+      "name": "Фильтр для топлива, улучшенная фильтрация",
+      "description": "Защищает топливную систему от загрязнений",
+      "price": 19.75,
+      "is_available": true,
+      "categories": [1]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 4,
+    "fields": {
+      "name": "Фильтр для салона, угольный",
+      "description": "Удаляет неприятные запахи и аллергены",
+      "price": 22.40,
+      "is_available": true,
+      "categories": [1]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 5,
+    "fields": {
+      "name": "Фильтр для масла, высокопродуктивный",
+      "description": "Для современных двигателей",
+      "price": 19.99,
+      "is_available": true,
+      "categories": [1]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 6,
+    "fields": {
+      "name": "Синтетическое моторное масло 5W-30",
+      "description": "Полностью синтетическое масло, 4 литра",
+      "price": 39.99,
+      "is_available": true,
+      "categories": [2]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 7,
+    "fields": {
+      "name": "Масло для трансмиссий 80W-90",
+      "description": "Для механических коробок передач",
+      "price": 28.50,
+      "is_available": true,
+      "categories": [2]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 8,
+    "fields": {
+      "name": "Автомобильный аккумулятор VARTA 60Ah",
+      "description": "Надежный аккумулятор с высоким пусковым током",
+      "price": 105.99,
+      "is_available": true,
+      "categories": [3]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 9,
+    "fields": {
+      "name": "Аккумулятор для грузовиков, 24V",
+      "description": "Мощный аккумулятор для коммерческого транспорта",
+      "price": 149.99,
+      "is_available": true,
+      "categories": [3]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 10,
+    "fields": {
+      "name": "Шампунь для мойки автомобиля",
+      "description": "Антистатический, 1 литр",
+      "price": 8.99,
+      "is_available": true,
+      "categories": [4]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 11,
+    "fields": {
+      "name": "Очиститель для шин",
+      "description": "Придает черный блеск",
+      "price": 6.50,
+      "is_available": true,
+      "categories": [4]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 12,
+    "fields": {
+      "name": "Воск для автомобиля",
+      "description": "Защитная полироль",
+      "price": 14.99,
+      "is_available": true,
+      "categories": [4]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 13,
+    "fields": {
+      "name": "Набор инструментов Stels 94 предмета",
+      "description": "Профессиональный набор с трещотками и головками",
+      "price": 129.99,
+      "is_available": true,
+      "categories": [5]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 14,
+    "fields": {
+      "name": "Отвертка Phillips",
+      "description": "Набор из 3 штук",
+      "price": 7.50,
+      "is_available": true,
+      "categories": [5]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 15,
+    "fields": {
+      "name": "LED-лампы Philips H7",
+      "description": "Яркий белый свет с долговечностью",
+      "price": 59.99,
+      "is_available": true,
+      "categories": [6]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 16,
+    "fields": {
+      "name": "Щетки стеклоочистителей Bosch Aerotwin",
+      "description": "Бескаркасные щетки для качественного очищения",
+      "price": 29.99,
+      "is_available": true,
+      "categories": [7]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 17,
+    "fields": {
+      "name": "Комплект автомобильных ковриков",
+      "description": "Резиновые, всесезонные",
+      "price": 45.99,
+      "is_available": true,
+      "categories": [8]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 18,
+    "fields": {
+      "name": "Держатель для телефона в авто",
+      "description": "Универсальное крепление",
+      "price": 9.99,
+      "is_available": true,
+      "categories": [8]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 19,
+    "fields": {
+      "name": "Пуско-зарядное устройство",
+      "description": "Позволяет запустить двигатель без аккумулятора",
+      "price": 189.99,
+      "is_available": true,
+      "categories": [3]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 20,
+    "fields": {
+      "name": "Гидравлический домкрат 3т",
+      "description": "Подходит для всех типов автомобилей",
+      "price": 55.99,
+      "is_available": true,
+      "categories": [5]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 21,
+    "fields": {
+      "name": "Набор предохранителей",
+      "description": "Ассортимент предохранителей разного номинала",
+      "price": 4.99,
+      "is_available": true,
+      "categories": [8]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 22,
+    "fields": {
+      "name": "Щетки стеклоочистителей зимние",
+      "description": "Устойчивы к низким температурам",
+      "price": 35.99,
+      "is_available": true,
+      "categories": [7]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 23,
+    "fields": {
+      "name": "Литиевый аккумулятор для мотоциклов",
+      "description": "Долговечный и легкий",
+      "price": 89.99,
+      "is_available": true,
+      "categories": [3]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 24,
+    "fields": {
+      "name": "Полироль для пластика",
+      "description": "Обновляет внешний вид салона",
+      "price": 7.99,
+      "is_available": true,
+      "categories": [4]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 25,
+    "fields": {
+      "name": "Пылесос автомобильный",
+      "description": "Компактный и мощный",
+      "price": 49.99,
+      "is_available": true,
+      "categories": [8]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 26,
+    "fields": {
+      "name": "Гибкий вороток 1/2",
+      "description": "Инструмент для работы с крепежом",
+      "price": 18.99,
+      "is_available": true,
+      "categories": [5]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 27,
+    "fields": {
+      "name": "Домкрат ромбический 2т",
+      "description": "Компактный и надежный",
+      "price": 32.99,
+      "is_available": true,
+      "categories": [5]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 28,
+    "fields": {
+      "name": "Магнитный держатель для инструмента",
+      "description": "Удобное хранение инструментов",
+      "price": 12.99,
+      "is_available": true,
+      "categories": [8]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 29,
+    "fields": {
+      "name": "Набор гаечных ключей",
+      "description": "12 ключей разных размеров",
+      "price": 24.99,
+      "is_available": true,
+      "categories": [5]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 30,
+    "fields": {
+      "name": "Лампочки H4 галогеновые",
+      "description": "Яркий белый свет",
+      "price": 14.99,
+      "is_available": true,
+      "categories": [6]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 32,
+    "fields": {
+      "name": "Литиевый аккумулятор Bosch 70Ah",
+      "description": "Высокая емкость и надежность",
+      "price": 129.99,
+      "is_available": true,
+      "categories": [3]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 33,
+    "fields": {
+      "name": "Автокомпрессор 12V",
+      "description": "Компактный компрессор для подкачки шин",
+      "price": 54.99,
+      "is_available": true,
+      "categories": [8]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 34,
+    "fields": {
+      "name": "Щетки стеклоочистителей зимние Bosch",
+      "description": "Для работы при низких температурах",
+      "price": 39.99,
+      "is_available": true,
+      "categories": [7]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 35,
+    "fields": {
+      "name": "Универсальный автоорганайзер",
+      "description": "Органайзер для хранения мелочей в багажнике",
+      "price": 19.99,
+      "is_available": true,
+      "categories": [8]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 36,
+    "fields": {
+      "name": "Зарядное устройство для аккумулятора",
+      "description": "Автоматическое зарядное устройство",
+      "price": 74.99,
+      "is_available": true,
+      "categories": [3]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 37,
+    "fields": {
+      "name": "Трос буксировочный 5т",
+      "description": "Прочный и надежный трос",
+      "price": 22.99,
+      "is_available": true,
+      "categories": [8]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 38,
+    "fields": {
+      "name": "Щетка для снега и льда",
+      "description": "Сочетает щетку и скребок",
+      "price": 14.99,
+      "is_available": true,
+      "categories": [7]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 39,
+    "fields": {
+      "name": "Галогенные лампы H1",
+      "description": "Яркий белый свет",
+      "price": 12.99,
+      "is_available": true,
+      "categories": [6]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 40,
+    "fields": {
+      "name": "Салфетки для стекол",
+      "description": "Антизапотевающие, набор из 20 штук",
+      "price": 5.99,
+      "is_available": true,
+      "categories": [4]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 41,
+    "fields": {
+      "name": "Фонарь автомобильный LED",
+      "description": "Перезаряжаемый светодиодный фонарь",
+      "price": 34.99,
+      "is_available": true,
+      "categories": [8]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 42,
+    "fields": {
+      "name": "Спрей для очистки инжекторов",
+      "description": "Эффективно удаляет загрязнения",
+      "price": 11.99,
+      "is_available": true,
+      "categories": [4]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 43,
+    "fields": {
+      "name": "Пусковые провода 3м",
+      "description": "Для быстрого запуска двигателя",
+      "price": 27.99,
+      "is_available": true,
+      "categories": [8]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 44,
+    "fields": {
+      "name": "Герметик для радиатора",
+      "description": "Останавливает утечки охлаждающей жидкости",
+      "price": 8.99,
+      "is_available": true,
+      "categories": [4]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 45,
+    "fields": {
+      "name": "Автоодеяло для двигателя",
+      "description": "Помогает сохранить тепло в мороз",
+      "price": 29.99,
+      "is_available": true,
+      "categories": [8]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 46,
+    "fields": {
+      "name": "Датчик давления в шинах",
+      "description": "Мониторинг давления в реальном времени",
+      "price": 59.99,
+      "is_available": true,
+      "categories": [8]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 47,
+    "fields": {
+      "name": "Ледоочиститель",
+      "description": "Быстро удаляет лед и снег с лобового стекла",
+      "price": 6.99,
+      "is_available": true,
+      "categories": [4]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 48,
+    "fields": {
+      "name": "Фильтр салонный угольный",
+      "description": "Эффективно очищает воздух",
+      "price": 24.99,
+      "is_available": true,
+      "categories": [1]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 49,
+    "fields": {
+      "name": "Ароматизатор для авто",
+      "description": "Долговечный аромат",
+      "price": 4.99,
+      "is_available": true,
+      "categories": [4]
+    }
+  },
+  {
+    "model": "store_app.Product",
+    "pk": 50,
+    "fields": {
+      "name": "Коврики в салон EVA",
+      "description": "Прочные и водонепроницаемые",
+      "price": 64.99,
+      "is_available": true,
+      "categories": [8]
+    }
+  }
+]

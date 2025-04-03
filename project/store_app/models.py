@@ -17,7 +17,7 @@ class Product(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
     price = models.FloatField()
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     is_available = models.BooleanField(default=True)
     categories = models.ManyToManyField(Category, related_name="products", blank=True)
 

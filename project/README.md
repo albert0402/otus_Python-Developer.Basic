@@ -139,14 +139,42 @@ docker-compose exec redis redis-cli ping
 ```
 
 
-## 5. Управление Django-приложением через Makefile
+### 5. Работа с базой данных Django-приложения
+
+База данных интернет магазина хранится в директории /store_app/fixtures в формате .json.
+Она состоит из двух файлов:
+- файл categories.json используется для хранения категорий в магазине;
+- файл products.json используется для хранения товаров в магазине.
+
+#### Загрузка категорий в интернет магазин:
+```bash
+docker-compose exec web poetry run python manage.py loaddata store_app/fixtures/categories.json
+```
+
+#### Выгрузка данных из класса Category с правильными отступами --indent 4:
+```bash
+docker-compose exec web poetry run python manage.py dumpdata store_app.Category --indent 4 > store_app/fixtures/categories.json
+```
+
+#### Загрузка товаров в интернет магазин:
+```bash
+docker-compose exec web poetry run python manage.py loaddata store_app/fixtures/products.json
+```
+
+#### Выгрузка данных из класса Product с правильными отступами --indent 4:
+```bash
+docker-compose exec web poetry run python manage.py dumpdata store_app.Product --indent 4 > store_app/fixtures/products.json
+```
+
+
+## 6. Управление Django-приложением через Makefile
 
 #### Список всех доступных команд Django-приложения:
 ```bash
 make help
 ```
 
-### 5.1 Docker Utilities (Управление контейнерами)
+### 6.1 Docker Utilities (Управление контейнерами)
 
 #### Просмотр логов всех сервисов в реальном времени:
 ```bash
@@ -168,7 +196,7 @@ make down
 make rebuild
 ```
 
-### 5.2 Django Management (Управление Django)
+### 6.2 Django Management (Управление Django)
 
 #### Применить миграции базы данных:
 ```bash
@@ -214,6 +242,7 @@ make db-shell
 ```bash
 make redis-ping
 ```
+
 
 ---
 
