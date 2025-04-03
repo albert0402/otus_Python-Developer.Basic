@@ -1,84 +1,128 @@
+# Определение всех сервисов (контейнеров) в приложении
 services:
-  # Nginx как reverse proxy и для раздачи статики
+  # Сервис Nginx - обратный прокси и сервер статических файлов
   nginx:
-    image: nginx:1.23-alpine  # Облегченный образ nginx
+    # Используем облегченный образ nginx на Alpine Linux
+    image: nginx:1.23-alpine
+    
+    # Проброс портов с хоста в контейнер:
     ports:
-      - "8000:443"  # Пробрасываем порт 443 контейнера на 8000 хоста для HTTPS
+      - "8000:8000"  # HTTP доступ по 127.0.0.1:8000 (без SSL)
+      - "80:80"      # HTTP порт для перенаправления на HTTPS
+      - "443:443"    # Основной HTTPS порт для localhost
+    
+    # Монтируемые volumes:
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf  # Монтируем конфиг nginx
-      - ./ssl/localhost.crt:/etc/ssl/certs/localhost.crt  # SSL-сертификат
-      - ./ssl/localhost.key:/etc/ssl/private/localhost.key  # SSL-ключ
-      - static_volume:/app/staticfiles  # Общий том для статики
-      - media_volume:/app/mediafiles  # Общий том для медиафайлов
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf  # Конфиг Nginx
+      - ./ssl/localhost.crt:/etc/ssl/certs/localhost.crt  # SSL сертификат
+      - ./ssl/localhost.key:/etc/ssl/private/localhost.key  # Приватный ключ SSL
+      - static_volume:/app/staticfiles  # Статические файлы Django
+      - media_volume:/app/mediafiles  # Медиафайлы Django
+    
+    # Зависимости - запускается только после сервиса web
     depends_on:
-      - web  # Ждем запуска web-сервиса
-    networks:
-      - backend  # Подключаем к внутренней сети
-
-  # Django приложение с Gunicorn
-  web:
-    build: .  # Собираем из Dockerfile в текущей директории
-    command: bash -c "poetry run python manage.py migrate && poetry run python manage.py collectstatic --noinput && poetry run gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 3"
-    env_file:
-      - .env  # Переменные окружения из файла
-    environment:
-      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
-      - REDIS_URL=${REDIS_URL}
-    volumes:
-      - .:/app  # Монтируем код для разработки (hot-reload)
-      - static_volume:/app/staticfiles  # Общий том для статики
-      - media_volume:/app/mediafiles  # Общий том для медиафайлов
-    expose:
-      - "8000"  # Открываем порт для других контейнеров в сети Docker
-    depends_on:
-      - db  # Ждем запуска БД
-      - redis  # Ждем запуска Redis
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/"]  # Проверка здоровья
-      interval: 30s  # Проверка каждые 30 секунд
-      timeout: 10s  # Таймаут 10 секунд
-      retries: 3  # Количество попыток
+      - web
+    
+    # Подключение к внутренней сети
     networks:
       - backend
 
-  # PostgreSQL база данных
-  db:
-    image: postgres:14-alpine  # Облегченный образ PostgreSQL
+  # Основной сервис Django с Gunicorn
+  web:
+    # Сборка из Dockerfile в текущей директории
+    build: .
+    
+    # Команда запуска:
+    command: bash -c "poetry run python manage.py migrate && 
+                     poetry run python manage.py collectstatic --noinput && 
+                     poetry run gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 3"
+    
+    # Файл с переменными окружения
+    env_file:
+      - .env
+    
+    # Дополнительные переменные окружения:
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}  # Имя БД
-      POSTGRES_USER: ${POSTGRES_USER}  # Пользователь
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}  # Пароль
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}  # URL БД
+      - REDIS_URL=${REDIS_URL}  # URL Redis
+    
+    # Монтируемые volumes:
     volumes:
-      - postgres_data:/var/lib/postgresql/data  # Том для хранения данных БД
+      - .:/app  # Монтирование кода приложения для hot-reload
+      - static_volume:/app/staticfiles  # Общие статические файлы
+      - media_volume:/app/mediafiles  # Общие медиафайлы
+    
+    # Открываем порт для других контейнеров
+    expose:
+      - "8000"
+    
+    # Зависимости - запускается после db и redis
+    depends_on:
+      - db
+      - redis
+    
+    # Проверка здоровья приложения
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]  # Проверка готовности БД
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]  # Проверка доступности
+      interval: 30s  # Интервал проверки
+      timeout: 10s  # Таймаут
+      retries: 3  # Количество попыток
+    
+    networks:
+      - backend
+
+  # Сервис PostgreSQL базы данных
+  db:
+    # Облегченный образ PostgreSQL 14 на Alpine
+    image: postgres:14-alpine
+    
+    # Переменные окружения для БД:
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}  # Имя базы данных
+      POSTGRES_USER: ${POSTGRES_USER}  # Пользователь БД
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}  # Пароль БД
+    
+    # Постоянное хранилище для данных БД
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    
+    # Проверка здоровья БД
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]  # Проверка готовности
       interval: 5s  # Частые проверки для БД
       timeout: 5s
       retries: 5
+    
     networks:
       - backend
 
-  # Redis для кэширования и Celery
+  # Сервис Redis для кэширования и Celery
   redis:
-    image: redis:6-alpine  # Облегченный образ Redis
+    # Облегченный образ Redis 6 на Alpine
+    image: redis:6-alpine
+    
+    # Постоянное хранилище для данных Redis
     volumes:
-      - redis_data:/data  # Том для хранения данных Redis
+      - redis_data:/data
+    
+    # Проверка здоровья Redis
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]  # Простая проверка работы Redis
+      test: ["CMD", "redis-cli", "ping"]  # Простая проверка работы
       interval: 5s
       timeout: 5s
       retries: 5
+    
     networks:
       - backend
 
 # Определение томов для хранения данных
 volumes:
-  postgres_data:  # Постоянное хранилище для БД
-  redis_data:  # Постоянное хранилище для Redis
-  static_volume:  # Общий том для статических файлов
-  media_volume:  # Общий том для медиафайлов
+  postgres_data:  # Том для хранения данных PostgreSQL
+  redis_data:  # Том для хранения данных Redis
+  static_volume:  # Том для статических файлов Django
+  media_volume:  # Том для медиафайлов Django
 
-# Создание внутренней сети для безопасного взаимодействия сервисов
+# Настройка внутренней сети
 networks:
   backend:
     driver: bridge  # Тип сети для связи между контейнерами
