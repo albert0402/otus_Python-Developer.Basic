@@ -3,10 +3,10 @@ logs:
 	docker-compose logs -f
 
 up:
-	docker-compose up -d
+	docker-compose up -d --build
 
 down:
-	docker-compose down
+	docker-compose down -v
 
 rebuild:
 	docker-compose up -d --build
