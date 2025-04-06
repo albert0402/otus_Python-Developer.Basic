@@ -147,6 +147,20 @@ docker-compose exec web poetry run python manage.py migrate
 docker-compose exec web poetry run python manage.py showmigrations
 ```
 
+#### Создание пустой начальной миграции:
+```bash
+mkdir -p store_app/migrations
+touch store_app/migrations/__init__.py
+echo "from django.db import migrations
+
+class Migration(migrations.Migration):
+    initial = True
+    dependencies = []
+    operations = []
+" > store_app/migrations/0001_initial.py
+```
+
+
 ### 4.2 Администрирование
 
 #### Создание суперпользователя:
