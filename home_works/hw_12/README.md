@@ -49,7 +49,7 @@ INSTALLED_APPS = [
 ## 3. Применение миграций
 ```bash
 python manage.py makemigrations
-python manage.py migrate
+python manage.py migrate   
 ```
 
 ---
