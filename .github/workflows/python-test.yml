@@ -24,11 +24,18 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install pytest pytest-cov pytest-django
+        pip list  # Для отладки - покажет установленные пакеты
+        
+    - name: Verify Django installation
+      working-directory: ./home_works/hw_12
+      run: |
+        python -c "import django; print(django.__version__)"
         
     - name: Run tests
       working-directory: ./home_works/hw_12
       env:
-        DJANGO_SETTINGS_MODULE: store_app.settings  # Проверить правильность пути!
+        DJANGO_SETTINGS_MODULE: config.settings
+        PYTHONPATH: ${{ github.workspace }}/home_works/hw_12
       run: |
         python manage.py migrate
         pytest store_app/tests --cov=./ --cov-report=xml
