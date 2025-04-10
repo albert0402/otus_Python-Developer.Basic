@@ -31,52 +31,51 @@
 # https://gitlab.com/gitlab-org/gitlab/-/issues/30178
 
 variables:
-  # DJANGO_CONFIG: "test"
-  MYSQL_DATABASE: $MYSQL_DB
-  MYSQL_ROOT_PASSWORD: $MYSQL_PASS
-  MYSQL_USER: $MYSQL_USER
-  MYSQL_PASSWORD: $MYSQL_PASS
+  PROJECT_PATH: "home_works/hw_12"
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  POETRY_VIRTUALENVS_IN_PROJECT: "true"
+  TEST_PATH: "store_app/tests"
 
+stages:
+  - test
+  - deploy-dev
+  - deploy-prod
+
+# Общие настройки
 default:
-  image: ubuntu:20.04
-  #
-  # Pick zero or more services to be used on all builds.
-  # Only needed when using a docker container to run your tests in.
-  # Check out: https://docs.gitlab.com/ee/ci/services/
-  services:
-    - mysql:8.0
-  #
-  # This folder is cached between builds
-  # http://docs.gitlab.com/ee/ci/yaml/README.html#cache
+  image: python:3.11
   cache:
     paths:
-      - ~/.cache/pip/
+      - ${PROJECT_PATH}/.cache/pip
+      - ${PROJECT_PATH}/.venv
+    key: ${CI_COMMIT_REF_SLUG}-${CI_PROJECT_ID}
   before_script:
-    - apt -y update
-    - apt -y install apt-utils
-    - apt -y install net-tools python3.8 python3-pip mysql-client libmysqlclient-dev
-    - apt -y upgrade
-    - pip3 install -r requirements.txt
+    - cd ${PROJECT_PATH}
+    - pip install poetry
+    - poetry install --no-interaction --no-ansi
 
-
-migrations:
-  stage: build
-  script:
-    - python3 manage.py makemigrations
-    # - python3 manage.py makemigrations myapp
-    - python3 manage.py migrate
-    - python3 manage.py check
-
-
-django-tests:
+# Тестирование (использует dev-настройки)
+test:
   stage: test
+  variables:
+    DJANGO_SETTINGS_MODULE: "config.settings"
   script:
-    # The MYSQL user only gets permissions for MYSQL_DB, so Django can't create a test database.
-    - echo "GRANT ALL on *.* to '${MYSQL_USER}';"| mysql -u root --password="${MYSQL_ROOT_PASSWORD}" -h mysql
-    # use python3 explicitly. see https://wiki.ubuntu.com/Python/3
-    - python3 manage.py test
+    - poetry run python manage.py test ${TEST_PATH}
+    - poetry run python manage.py check --deploy
 
-deploy:
-  stage: deploy
-  script: echo "Define your deployment script!"
-  environment: production
+# Деплой 
+deploy-prod:
+  stage: deploy-prod
+  variables:
+    DJANGO_SETTINGS_MODULE: "config.settings.production"
+  script:
+    - echo "Деплой на production"
+    - poetry run python manage.py check --deploy
+    - poetry run python manage.py collectstatic --noinput
+    # Добавьте production-команды
+  environment:
+    name: production
+    url: https://yourdomain.com
+  when: manual  # Требует ручного подтверждения
+  only:
+    - main  # Ветка для production
