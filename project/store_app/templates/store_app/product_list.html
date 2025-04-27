@@ -3,6 +3,16 @@
 {% block content %}
 <div class="container mt-4">
     <h2 class="mb-4">Список товаров</h2>
+    
+    <!-- Добавленный блок для отображения текущей категории -->
+    {% if current_category %}
+        <div class="alert alert-info mb-3">
+            Показаны товары из категории: <strong>{{ current_category.name }}</strong>
+            <a href="{% url 'product_list' %}" class="btn btn-sm btn-outline-secondary ms-3">
+                Показать все товары
+            </a>
+        </div>
+    {% endif %}
 
     <!-- Форма фильтрации -->
     <form method="get" class="mb-4">

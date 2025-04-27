@@ -134,6 +134,9 @@ def contact(request):
     """Представление для страницы контактов"""
     return render(request, "store_app/contact.html")
 
+def login(request):
+    """Представление для личного кабинета"""
+    return render(request, "store_app/login.html")
 
 # --------- Categories ---------
 def category_list(request):
@@ -228,6 +231,10 @@ class ProductListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["categories"] = Category.objects.all()
+        category_id = self.request.GET.get("category")
+        if category_id:
+            context["current_category"] = get_object_or_404(Category, id=category_id)
+        
         return context
 
 

@@ -14,6 +14,7 @@ urlpatterns = [
     path("delivery/", views.delivery, name="delivery"),
     path("map_page/", views.map_page, name="map_page"),
     path("contact/", views.contact, name="contact"),
+    path("login/", views.login, name="login"),
     # Category URLs FBV (Function-Based Views)
     path("categories/", views.category_list, name="category_list"),
     path("categories/add/", views.add_category, name="add_category"),

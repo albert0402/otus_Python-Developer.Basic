@@ -40,9 +40,7 @@ ALLOWED_HOSTS = [
 # Доверенные источники для CSRF защиты
 # Особенно важно для работы через HTTPS
 CSRF_TRUSTED_ORIGINS = [
-    f"https://{host}"
-    for host in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
-    if host
+    host for host in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",") if host
 ]
 
 # Настройка заголовков безопасности при работе за reverse proxy (nginx)
