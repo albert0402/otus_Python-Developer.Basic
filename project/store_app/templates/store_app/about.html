@@ -1,4 +1,5 @@
 {% extends 'store_app/base.html' %}
+{% load static %}
 
 {% block title %}О магазине{% endblock %}
 
@@ -9,7 +10,7 @@
             <h1 class="mb-4 text-center">О нашем магазине</h1>
             
             <div class="text-center mb-4">
-                <img src="/pictures/shop.jpg" class="img-fluid rounded shadow" alt="Фото магазина" style="max-height: 400px;">
+                <img src="{% static 'categories/shop.jpg' %}" class="img-fluid rounded shadow" alt="Фото магазина" style="max-height: 400px;">
             </div>
 
             <div class="card mb-4">
